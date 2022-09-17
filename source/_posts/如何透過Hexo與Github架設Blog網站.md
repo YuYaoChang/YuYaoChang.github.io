@@ -37,7 +37,7 @@ tags:
 創建完Repository後，使用git clone把Repository下到本地端。
 (看個人習慣使用[指令](https://git-scm.com/downloads)或[Github Desktop](https://desktop.github.com/))
 ```
-$ git clone <repo_url.git>
+$git clone <repo_url.git>
 ```
 
 ## Hexo
@@ -51,17 +51,17 @@ $ git clone <repo_url.git>
 因此安裝前，首先需要先安裝[Node.js](https://nodejs.org/zh-tw/download/)，
 安裝完成後，打開Terminal輸入：
 ```
-$ cd <想要安裝的路徑>
-$ npm install hexo-cli -g
-$ hexo init <要創建的資料夾名稱>
+$cd <想要安裝的路徑>
+$npm install hexo-cli -g
+$hexo init <要創建的資料夾名稱>
 ```
 完成後將會看到創好的資料夾以及內含的Hexo基本配置檔案，
 注意：接下來需要將創好的資料夾中的所有檔案copy到clone下來的資料夾中(原資料夾就可以刪了)，
 (如果熟悉操作也可直接安裝在clone下來的資料夾)
 並在Terminal輸入：
 ```
-$ cd <clone下來的資料夾路徑>
-$ npm install
+$cd <clone下來的資料夾路徑>
+$npm install
 ```
 這樣就可以完成Hexo安裝。
 ### Hexo資料夾架構
@@ -84,7 +84,7 @@ $ npm install
 (剛才透過npm install安裝的東西)
 **scaffolds/**
 `scaffolds/`這個資料夾主要存放預設模板，
-當使用`$ hexo new <type> <name>`來創建一個新頁面或貼文時，
+當使用`$hexo new <type> <name>`來創建一個新頁面或貼文時，
 Hexo將會使用這些模板建立檔案。
 **source/**
 `source/`這個資料夾主要存放網站中所有的資料，
@@ -225,7 +225,7 @@ deploy:
 因為是使用Github來進行Deploy，
 需要先安裝`hexo-deployer-git`[套件](https://hexo.io/zh-tw/docs/one-command-deployment.html)，
 ```
-$ npm install hexo-deployer-git --save
+$npm install hexo-deployer-git --save
 ```
 如果沒安裝將會出現ERROR Deployer not found:git。
 ### 將Hexo部署到Github Page
@@ -233,17 +233,17 @@ $ npm install hexo-deployer-git --save
 即可開始將Hexo部署到Github Page，
 一樣先打開Terminal，並切換到clone下來的資料夾，並輸入：
 ```
-$ cd <clone下來的資料夾路徑>
-$ hexo clean # 清除快取檔案db.json、已產生的靜態檔案public
-$ hexo generate # 產生靜態檔案
-$ hexo server # 啟動伺服器，預設為http://localhost:4000/
-$ hexo deploy # 部署網站
+$cd <clone下來的資料夾路徑>
+$hexo clean # 清除快取檔案db.json、已產生的靜態檔案public
+$hexo generate # 產生靜態檔案
+$hexo server # 啟動伺服器，預設為http://localhost:4000/
+$hexo deploy # 部署網站
 ```
-其中，`$ hexo server`不一定需要使用，
+其中，`$hexo server`不一定需要使用，
 它主要是用來在本地端導覽網站內容(像是測試使用)，
 使用時，如果預設的port埠已使用，
-可以透過`$ hexo server -p <port埠>`使用另一個port埠來啟動伺服器；
-當使用`$ hexo deploy`完成Deploy後，
+可以透過`$hexo server -p <port埠>`使用另一個port埠來啟動伺服器；
+當使用`$hexo deploy`完成Deploy後，
 等待一下再到你的Blog頁面`https://<user_name>.github.io/`，
 就可以看到你的Blog網站了。
 
