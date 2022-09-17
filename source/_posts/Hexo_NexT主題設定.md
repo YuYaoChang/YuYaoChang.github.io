@@ -1,6 +1,6 @@
 ------
 title: Hexo_NexT主題設定
-date: 
+date: 2022-09-18
 categories: Hexo
 tags: 
  - Hexo
@@ -9,13 +9,12 @@ tags:
 ------
 
 上一篇介紹有關[**如何透過Hexo與Github架設Blog網站**](https://yuyaochang.github.io/2022/09/04/%E5%A6%82%E4%BD%95%E9%80%8F%E9%81%8EHexo%E8%88%87Github%E6%9E%B6%E8%A8%ADBlog%E7%B6%B2%E7%AB%99/#more)，
-這一篇來介紹**Hexo主題設定及其他常用套件**
-<!--more-->
+這一篇來介紹**Hexo_NexT主題設定**
 ## Theme:NexT
 主題的部分，[Hexo官網](https://hexo.io/themes/)上有許多主題可供大家下載，
 建議可以找近期還有在維護的主題，
 本篇以許多人選擇的[NexT主題](https://github.com/theme-next/hexo-theme-next)為例。
-(因為我喜歡乾淨整潔的畫面私心推薦XD)
+(因為我喜歡乾淨整潔的畫面私心推薦XD)<!--more-->
 ### NexT基本安裝
 雖然說叫安裝，但其實也只是把它從Github上面拉下來，
 首先，先切換到`themes/`資料夾中，並建立一個`NexT`資料夾，

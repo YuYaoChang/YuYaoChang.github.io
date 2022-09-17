@@ -260,3 +260,9 @@ $hexo deploy # 部署網站
 
 
 完成以上步驟後，基本的Blog網站就設定好了~
+
+
+
+延伸閱讀：
+[Hexo_NexT主題設定](https://yuyaochang.github.io/2022/09/18/Hexo_NexT%E4%B8%BB%E9%A1%8C%E8%A8%AD%E5%AE%9A/#more)
+
