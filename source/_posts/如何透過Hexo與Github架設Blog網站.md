@@ -264,5 +264,4 @@ $hexo deploy # 部署網站
 
 
 延伸閱讀：
-[NexT主題設定、實際使用Hexo及Hexo其他常用套件](https://yuyaochang.github.io/2022/09/18/Hexo_NexT%E4%B8%BB%E9%A1%8C%E8%A8%AD%E5%AE%9A%E5%8F%8AHexo%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%A5%97%E4%BB%B6/#more)
-
+[NexT主題設定、實際使用Hexo及Hexo其他常用套件](https://yuyaochang.github.io/2022/09/18/NexT%E4%B8%BB%E9%A1%8C%E8%A8%AD%E5%AE%9A%E3%80%81%E5%AF%A6%E9%9A%9B%E4%BD%BF%E7%94%A8Hexo%E5%8F%8AHexo%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%A5%97%E4%BB%B6/#more)
