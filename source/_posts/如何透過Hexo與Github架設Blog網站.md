@@ -36,7 +36,7 @@ tags:
 <img src="/images/hexo_github/create_repo.jpg" width="50%">
 創建完Repository後，使用git clone把Repository下到本地端。
 (看個人習慣使用[指令](https://git-scm.com/downloads)或[Github Desktop](https://desktop.github.com/))
-```
+```yml
 $git clone <repo_url.git>
 ```
 
@@ -50,7 +50,7 @@ $git clone <repo_url.git>
 因為安裝Hexo需要使用[npm(node package manager)](https://github.com/nodejs-tw/nodejs-wiki-book/blob/master/zh-tw/node_npm.rst)，
 因此安裝前，首先需要先安裝[Node.js](https://nodejs.org/zh-tw/download/)，
 安裝完成後，打開Terminal輸入：
-```
+```yml
 $cd <想要安裝的路徑>
 $npm install hexo-cli -g
 $hexo init <要創建的資料夾名稱>
@@ -59,14 +59,14 @@ $hexo init <要創建的資料夾名稱>
 注意：接下來需要將創好的資料夾中的所有檔案copy到clone下來的資料夾中(原資料夾就可以刪了)，
 (如果熟悉操作也可直接安裝在clone下來的資料夾)
 並在Terminal輸入：
-```
+```yml
 $cd <clone下來的資料夾路徑>
 $npm install
 ```
 這樣就可以完成Hexo安裝。
 ### Hexo資料夾架構
 完成Hexo安裝後，可以看到Hexo資料夾架構大概長這樣。
-```
+```yml
 - _config.yml
 - package.json
 - package-lock.json
@@ -106,7 +106,7 @@ Hexo將會使用這些模板建立檔案。
 大致說明一下根目錄`_config.yml`設定，
 比較會用到的設定以及要注意的地方。
 #### 全站設定
-```
+```yml
 # Site
 title: # Blog名稱
 subtitle: # Blog副標題
@@ -117,7 +117,7 @@ language: # 網站語言 e.g. zh-TW
 timezone: # 網站時區 e.g. 'Asia/Taipei'
 ```
 #### 網站url設定
-```
+```yml
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: # 網站網址
@@ -130,7 +130,7 @@ pretty_urls:
 ```
 注意：網站網址，必須使用 `http://` 或 `https://` 開頭。
 #### 存放檔案的資料夾設定
-```
+```yml
 # Directory
 source_dir: source
 public_dir: public
@@ -142,7 +142,7 @@ i18n_dir: :lang
 skip_render:
 ```
 #### 文章寫作設定
-```
+```yml
 # Writing
 new_post_name: :title.md # File name of new posts
 default_layout: post # 預設佈局
@@ -170,7 +170,7 @@ prismjs:
   tab_replace: ''
 ```
 #### 首頁設定
-```
+```yml
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
 # per_page: Posts displayed per page. (0 = disable pagination)
@@ -183,7 +183,7 @@ index_generator:
 這部分基本上可以安裝`hexo-generator-index2`套件取代，
 後續提到會再介紹。
 #### 分頁設定
-```
+```yml
 # Pagination
 ## Set per_page to 0 to disable pagination
 per_page: 10
@@ -192,7 +192,7 @@ pagination_dir: page
 `per_page`可以設定一頁顯示的文章量，
 若設定0表示關閉分頁功能。
 #### 包含 / 不包含
-```
+```yml
 # Include / Exclude file(s)
 ## include:/exclude: options only apply to the 'source/' folder
 include: # Hexo預設忽略的隱藏檔、資料夾，若將其列在此Hexo將會使用
@@ -203,7 +203,7 @@ ignore:
 1. 列在這些項目下的檔案、資料夾需要加雙引號或單引號，如：`"<檔案名稱>"`或`'<檔案名稱>'`。
 2. 若要忽略`themes/`資料夾中的內容，需加`_`在前面，如：`_檔案名稱`。
 #### 主題
-```
+```yml
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
@@ -214,7 +214,7 @@ theme: <Blog主題>
 放入`themes/`資料夾中(通常會存成`themes/主題名稱/主題檔案`)，
 並將此處Blog主題設定為所下載的主題名稱即可。
 #### 部署
-```
+```yml
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
@@ -224,7 +224,7 @@ deploy:
 ```
 因為是使用Github來進行Deploy，
 需要先安裝`hexo-deployer-git`[套件](https://hexo.io/zh-tw/docs/one-command-deployment.html)，
-```
+```yml
 $npm install hexo-deployer-git --save
 ```
 如果沒安裝將會出現ERROR Deployer not found:git。
@@ -232,7 +232,7 @@ $npm install hexo-deployer-git --save
 將`_config.yml`設定檔調整完成後，
 即可開始將Hexo部署到Github Page，
 一樣先打開Terminal，並切換到clone下來的資料夾，並輸入：
-```
+```yml
 $cd <clone下來的資料夾路徑>
 $hexo clean # 清除快取檔案db.json、已產生的靜態檔案public
 $hexo generate # 產生靜態檔案
@@ -264,5 +264,5 @@ $hexo deploy # 部署網站
 
 
 延伸閱讀：
-[Hexo_NexT主題設定](https://yuyaochang.github.io/2022/09/18/Hexo_NexT%E4%B8%BB%E9%A1%8C%E8%A8%AD%E5%AE%9A/#more)
+[NexT主題設定、實際使用Hexo及Hexo其他常用套件](https://yuyaochang.github.io/2022/09/18/Hexo_NexT%E4%B8%BB%E9%A1%8C%E8%A8%AD%E5%AE%9A%E5%8F%8AHexo%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%A5%97%E4%BB%B6/#more)
 
