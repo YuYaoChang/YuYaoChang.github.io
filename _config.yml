@@ -127,3 +127,11 @@ addlink:
   before_text: <br /><br />作者：Ian Chang <br />網址：
   after_text: <br />版權聲明：Blog中所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/tw/">CC BY-NC-SA 3.0 TW</a> 許可協議，若要轉載請註明出處
 
+
+# Sitemap
+sitemap:
+  path: sitemap.xml # sitemap path
+  tags: false # include true, exclude false
+  categories: false # include true, exclude false
+
+
