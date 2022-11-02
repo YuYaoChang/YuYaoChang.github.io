@@ -38,12 +38,12 @@
 
 
 
-  <meta name="description" content="推薦系統就像是一種 “訊息過濾系統”，會依照特定的規則進行過濾，並預測用戶對商品的 “評分” 或 “偏好”，透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。 推薦系統的演算法發展至今，Python、R 等許多程式都有提供相關套件進行推薦系統的演算法運算，因此就目前而言，不是著重於如何實現這些演算法運算，而是透過哪個演算法才能夠解決當下的問題。">
+  <meta name="description" content="推薦系統就像是一種 “訊息過濾系統”，**會依照特定的規則進行過濾，並預測用戶對商品的 “評分” 或 “偏好”**，透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。 推薦系統的演算法發展至今，Python、R 等許多程式都有提供相關套件進行推薦系統的演算法運算，因此就目前而言，不是著重於如何實現這些演算法運算，而是透過哪個演算法才能夠解決當下的問題">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Recommendation_System_推薦系統概念介紹_Python">
 <meta property="og:url" content="https://yuyaochang.github.io/2022/11/03/Recommendation_System_%E6%8E%A8%E8%96%A6%E7%B3%BB%E7%B5%B1%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%B4%B9_Python/index.html">
 <meta property="og:site_name" content="YuYao&#39;s Blog">
-<meta property="og:description" content="推薦系統就像是一種 “訊息過濾系統”，會依照特定的規則進行過濾，並預測用戶對商品的 “評分” 或 “偏好”，透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。 推薦系統的演算法發展至今，Python、R 等許多程式都有提供相關套件進行推薦系統的演算法運算，因此就目前而言，不是著重於如何實現這些演算法運算，而是透過哪個演算法才能夠解決當下的問題。">
+<meta property="og:description" content="推薦系統就像是一種 “訊息過濾系統”，**會依照特定的規則進行過濾，並預測用戶對商品的 “評分” 或 “偏好”**，透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。 推薦系統的演算法發展至今，Python、R 等許多程式都有提供相關套件進行推薦系統的演算法運算，因此就目前而言，不是著重於如何實現這些演算法運算，而是透過哪個演算法才能夠解決當下的問題">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://yuyaochang.github.io/images/recommender_system/recommender_system_classfiy.jpg">
 <meta property="og:image" content="https://yuyaochang.github.io/images/recommender_system/contentbased_filtering.jpg">
@@ -57,7 +57,7 @@
 <meta property="og:image" content="https://yuyaochang.github.io/images/recommender_system/MF.jpg">
 <meta property="og:image" content="https://yuyaochang.github.io/images/recommender_system/MF_SVD.jpg">
 <meta property="article:published_time" content="2022-11-02T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-11-02T17:31:37.764Z">
+<meta property="article:modified_time" content="2022-11-02T17:38:48.672Z">
 <meta property="article:author" content="YuYao Ian Chang">
 <meta property="article:tag" content="Recommendation System">
 <meta property="article:tag" content="Python">
@@ -258,7 +258,7 @@
               <span class="post-meta-item-text">發表於</span>
               
 
-              <time title="創建時間：2022-11-03 00:00:00 / 修改時間：01:31:37" itemprop="dateCreated datePublished" datetime="2022-11-03T00:00:00+08:00">2022-11-03</time>
+              <time title="創建時間：2022-11-03 00:00:00 / 修改時間：01:38:48" itemprop="dateCreated datePublished" datetime="2022-11-03T00:00:00+08:00">2022-11-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -288,7 +288,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>推薦系統就像是一種 “訊息過濾系統”，會依照特定的規則進行過濾，並預測用戶對商品的 “評分” 或 “偏好”，<br>透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。</p>
+        <p>推薦系統就像是一種 “訊息過濾系統”，**會依照特定的規則進行過濾，並預測用戶對商品的 “評分” 或 “偏好”**，<br>透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。</p>
 <p>推薦系統的演算法發展至今，Python、R 等許多程式都有提供相關套件進行推薦系統的演算法運算，<br>因此就目前而言，不是著重於如何實現這些演算法運算，而是透過哪個演算法才能夠解決當下的問題。</p>
 <p><img src="/images/recommender_system/recommender_system_classfiy.jpg"><span id="more"></span></p>
 <hr>
@@ -389,7 +389,7 @@ SVD 為一種降維工具，可拆解成 U, Sigma, Vt 三個矩陣，而對角�
 <h2 id="推薦系統的限制與缺點"><a href="#推薦系統的限制與缺點" class="headerlink" title="推薦系統的限制與缺點"></a>推薦系統的限制與缺點</h2><h3 id="冷啟動-Cold-Start"><a href="#冷啟動-Cold-Start" class="headerlink" title="冷啟動(Cold Start)"></a>冷啟動(Cold Start)</h3><p>碰到新用戶、新商品的情況下，沒有(被)使用或(被)瀏覽的商品，在某些推薦系統上將會發生無法推薦的窘境，我們該怎麼推薦商品？<br>解法：先以其他 Item-Based 的方式，透過新商品的屬性、新用戶的特徵來推薦給用戶，累積一定的使用資料後，再慢慢放入協同過濾所推薦的內容。</p>
 <ul>
 <li>冷門商品在協同過濾系統下，都不會成為推薦商品</li>
-<li>資料量不足以致於推薦系統效果不佳、無法使用</li>
+<li><strong>資料量不足以致於推薦系統效果不佳、無法使用</strong></li>
 </ul>
 <h3 id="探索問題-Exploit-amp-Explore-EE"><a href="#探索問題-Exploit-amp-Explore-EE" class="headerlink" title="探索問題(Exploit &amp; Explore, EE)"></a>探索問題(Exploit &amp; Explore, EE)</h3><p>Exploit 是指使用已知用戶偏好來做分析； Explore 是指探索用戶未知的興趣或者偏好。<br>解法：部分使用模型預測、熱門、隨機等方法；而如何挑選，將透過商業角度或者AB test的方式進行。</p>
 <h3 id="資料稀疏-Data-Sparsity"><a href="#資料稀疏-Data-Sparsity" class="headerlink" title="資料稀疏(Data Sparsity)"></a>資料稀疏(Data Sparsity)</h3><p>某電商平台銷售同類型、過多相似的商品(資訊量過多)時，可能造成資料稀疏(Data Sparsity)的問題，即當用戶無法瀏覽大部分商品時，將會造成蒐集資料上的稀疏。</p>
