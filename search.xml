@@ -105,63 +105,127 @@
       </tags>
   </entry>
   <entry>
-    <title>投資初心者系列 - 交易模式</title>
-    <url>/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97%20-%20%E4%BA%A4%E6%98%93%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<p>近年來投資市場越來越熱絡，<br>或許是因為多數人的理財觀念有所提升，知道把錢存在銀行會因為通貨膨脹而越變越薄；<br>又或是從過去的經驗來看把錢投入股市，長期而言，<br>股市將會不斷的上漲，即便跌得再深都有漲回來的一天。<br>(會不會每次都漲回來我自己持保留態度，後續有機會再探討這個議題)</p>
-<p>本系列希望講述一些投資相關基本知識以及我個人認為投資中最重要的事，<br>第一篇就先以交易模式作為主要介紹內容。</p>
-<h3 id="學投資的第一步應該要做什麼"><a href="#學投資的第一步應該要做什麼" class="headerlink" title="學投資的第一步應該要做什麼?"></a>學投資的第一步應該要做什麼?</h3><p>看到這個標題很多人會直覺回答：<strong>當然是學怎麼賺錢囉~</strong><span id="more"></span><br>我認為這句話對也不對，<br>許多人學投資的第一步是去了解：基本面分析、技術面分析、看投顧老師節目等，<br>試圖了解如何挑選到會上漲的標的，但往往不會考慮到背後的風險，<br>在投資的過程中，永遠要記住<strong>期望的報酬越高，風險將會越大</strong>；<br>而賺錢是希望透過投資達到的最終目的，<br>但想要達到這個目的會需要滿足很多種條件，<br>不只是單靠挑選到會上漲的標的就好，<br>還需要透過資金、風險管理等方式，做一些看錯方向時的停損、下跌保護等操作。<br><del>當然如果你非常厲害勝率100%永遠不會看錯方向…另當別論</del></p>
-<h3 id="交易模式"><a href="#交易模式" class="headerlink" title="交易模式"></a>交易模式</h3><p>投資最重要的事，其中之一就是<strong>交易模式</strong>。</p>
-<p>為什麼要了解交易模式？</p>
-<p>市場是由許多不同的人所組成的，<br>每個人所制定的交易邏輯、進出場策略以及對未來趨勢的看法都不一樣，<br><code>tips:市場上要有不同的操作、看法才會促成市場成交(流動性)</code><br>因此，制訂一套適合自已、擅長操作的交易模式是非常重要的。</p>
-<p>要了解自己的個性、風險承受度適合哪種交易模式，<br>首先，要先了解交易模式有哪些，<br>交易模式主要可以分成左側交易與右側交易。</p>
-<h4 id="左側交易-逆勢交易"><a href="#左側交易-逆勢交易" class="headerlink" title="左側交易(逆勢交易)"></a>左側交易(逆勢交易)</h4><p>左側交易(逆勢交易)的概念，<br>主要是<strong>在下跌時分批買入，在上漲時分批賣出</strong>，<br>這種交易模式又可稱為<strong>價值投資</strong>，<br>當標的下跌到合理價格範圍時，分批佈局；<br>左側交易比較適合具有長期投資(或搶反彈)、資金龐大、有耐心、心理素質強等因素的投資者，<br>這種交易模式較違反人性，<br>當標的下跌越多時，需要買入的部位越多，<br>因此挑選對標的、做好資金管理就是一件十分重要的事。</p>
-<img src="/images/Investment/左側交易.jpg" width="50%">
+    <title>Recommendation_System_推薦系統概念介紹_Python</title>
+    <url>/2022/11/03/Recommendation_System_%E6%8E%A8%E8%96%A6%E7%B3%BB%E7%B5%B1%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%B4%B9_Python/</url>
+    <content><![CDATA[<p>推薦系統就像是一種 “訊息過濾系統”，會依照特定的規則進行過濾，並預測用戶對商品的 “評分” 或 “偏好”，<br>透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。</p>
+<p>推薦系統的演算法發展至今，Python、R 等許多程式都有提供相關套件進行推薦系統的演算法運算，<br>因此就目前而言，不是著重於如何實現這些演算法運算，而是透過哪個演算法才能夠解決當下的問題。</p>
+<p><img src="/images/recommender_system/recommender_system_classfiy.jpg"><span id="more"></span></p>
+<hr>
+<h2 id="非客製化推薦-Non-Personalized"><a href="#非客製化推薦-Non-Personalized" class="headerlink" title="非客製化推薦 ( Non-Personalized )"></a>非客製化推薦 ( Non-Personalized )</h2><p>在企業、商業模式草創初期，銷售的商品品項不多，又或只專注於銷售單一商品造成銷售量差異懸殊時，<br>無須使用客製化推薦，以非客製化推薦效益較高。</p>
+<h3 id="Item-Based"><a href="#Item-Based" class="headerlink" title="Item-Based"></a>Item-Based</h3><h4 id="熱銷商品推薦"><a href="#熱銷商品推薦" class="headerlink" title="熱銷商品推薦"></a>熱銷商品推薦</h4><p>透過所有用戶對於商品的熱度或點閱率等方式來進行商品推薦 ( 對於時效性議題、商品非常有效 )</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">ratings = &#123;</span><br><span class="line">    <span class="string">&#x27;item&#x27;</span>:[*(<span class="string">&#x27;item_A &#x27;</span>*<span class="number">100</span>).split(),*(<span class="string">&#x27;item_B &#x27;</span>*<span class="number">30</span>).split(),*(<span class="string">&#x27;item_C &#x27;</span>*<span class="number">40</span>).split(),*(<span class="string">&#x27;item_D &#x27;</span>*<span class="number">130</span>).split()],</span><br><span class="line">    <span class="string">&#x27;rating&#x27;</span>:<span class="built_in">list</span>(np.random.randint(<span class="number">1</span>,<span class="number">5</span>,size = <span class="number">300</span>))</span><br><span class="line">&#125;</span><br><span class="line">ratings = pd.DataFrame(ratings)</span><br><span class="line"><span class="comment"># ratings 用戶評分資料，商品與評分兩個欄位</span></span><br><span class="line">frequency = ratings[<span class="string">&#x27;item&#x27;</span>].value_counts()</span><br><span class="line"><span class="comment"># 篩選 item 筆數大於 50 筆的資料</span></span><br><span class="line">item_frequency = frequency[frequency &gt; <span class="number">50</span>].index</span><br><span class="line"><span class="comment"># 將資料筆數較少的資料刪除</span></span><br><span class="line">item_frequent = ratings[ratings[<span class="string">&#x27;item&#x27;</span>].isin(item_frequency)]</span><br><span class="line"><span class="comment"># 計算每一個 item 的平均分數</span></span><br><span class="line">avg_rating = item_frequent[[<span class="string">&#x27;item&#x27;</span>,<span class="string">&#x27;rating&#x27;</span>]].groupby([<span class="string">&#x27;item&#x27;</span>]).mean()</span><br><span class="line"><span class="comment"># 根據分數進行排序</span></span><br><span class="line">sort_item_rating = avg_rating.sort_values(by=<span class="string">&#x27;rating&#x27;</span>, ascending=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 列出想要優先推薦的 item 順序</span></span><br><span class="line">sort_item_rating</span><br></pre></td></tr></table></figure>
 
-<p>左側交易最害怕的是<strong>下跌時分批買入，最後股價沒有回升、被套牢</strong>，<br>因此，在挑選標的的部分：<br>標的要符合長期上行趨勢、體質強健等條件，<br>如果標的體質不夠強健，遇到熊市時，<br>無法保證標的是否能撐過熊市時期(如：股票下市、營收持續惡化等)；<br>如果長期不為上行趨勢，熬過下跌後，<br>後續上漲的機率可能相較於長期上行趨勢的標的來的低。</p>
-<p>而在資金管理的部分，<br>左側交易需要控制下跌時分批買入以及上漲時分批賣出的速度，<br>否則容易遇到在長期下跌的過程中，買入速度太快，導致平均持倉成本過高(套牢在高點)，<br>並且當標的價格較低時，已無資金可以進場壓低平均持倉成本；<br>又或者在上漲的過程中，賣出速度太快，導致錯過後續長期多頭的中後段漲幅(魚尾留給別人賺)。</p>
-<p>從資金管理的邏輯上，也將延伸出另一個問題，<br>左側交易需要了解目前標的價格是否在一個合理的價位，<br>或者說需要了解市場當下對該標的折溢價狀況是否合理，<br>這會需要有很多基本面(標的、總體經濟等)的相關知識才能夠進行判斷。</p>
-<p>優點：</p>
-<ol>
-<li>買在相對低點，長期持有勝率、獲利空間較大。</li>
-<li>較不會有滑價問題。</li>
-<li><del>標的價格遠離成本價後，可以安心睡覺。</del></li>
-</ol>
-<p>缺點：</p>
-<ol>
-<li>等待反彈並獲利所需要的時間很長、時間成本高。</li>
-<li>投資者需要有強大的心理素質，在下跌的過程中，堅持自己的交易決策。</li>
-</ol>
-<h4 id="右側交易-順勢交易"><a href="#右側交易-順勢交易" class="headerlink" title="右側交易(順勢交易)"></a>右側交易(順勢交易)</h4><p>右側交易(順勢交易)的概念，<br>主要是<strong>在上漲時分批買入，在下跌時分批賣出</strong>，<br>這種交易模式又可稱為<strong>動能交易</strong>，<br>當標的出現底部型態且已出現上漲趨勢時，分批買入，<br>待標的漲到頂部且已開始下跌時，分批賣出，<br>即不預測未來漲跌，只跟著市場趨勢順勢做交易；<br>這種交易模式較適合具有遵守交易紀律、做短線、做波段等因素的投資者。</p>
-<img src="/images/Investment/右側交易.jpg" width="50%">
+<h4 id="隨機推薦"><a href="#隨機推薦" class="headerlink" title="隨機推薦"></a>隨機推薦</h4><p>隨機投遞商品或物品給用戶 ( 隨機的結果可能比運算的結果還要好 )</p>
+<h3 id="User-Based"><a href="#User-Based" class="headerlink" title="User-Based"></a>User-Based</h3><h4 id="用戶推薦-x2F-建議"><a href="#用戶推薦-x2F-建議" class="headerlink" title="用戶推薦&#x2F;建議"></a>用戶推薦&#x2F;建議</h4><p>計算觀看相似商品的用戶，可能會對哪些商品有興趣；可將此應用至草創初期，<br>即當用戶隨意點一項商品後，直接推薦相似的商品給其他用戶。</p>
+<ul>
+<li>透過窮盡法將所有可能列舉出來(排列組合)，不考慮不同評分間的差異，取出推薦組合次數最多的商品。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> permutations <span class="comment"># 使用 Permutation tool 進行取後不放回的抽樣(列出所有可能的排列組合)</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">user_item = &#123;</span><br><span class="line">    <span class="string">&#x27;user&#x27;</span>:[<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;item&#x27;</span>:[<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemC&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>]</span><br><span class="line">&#125;</span><br><span class="line">user_item = pd.DataFrame(user_item)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_pairs</span>(<span class="params">item_df</span>):</span><br><span class="line">    pairs = <span class="built_in">list</span>(permutations(item_df.values,<span class="number">2</span>)) <span class="comment"># 從item隨機抽取2個取後不放回</span></span><br><span class="line">    pairs = pd.DataFrame(pairs,columns=[<span class="string">&#x27;item_1&#x27;</span>,<span class="string">&#x27;item_2&#x27;</span>])</span><br><span class="line">    <span class="keyword">return</span> pairs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 將資料進行轉換</span></span><br><span class="line">item_pairs = user_item.groupby(<span class="string">&#x27;user&#x27;</span>)[<span class="string">&#x27;item&#x27;</span>].apply(create_pairs).reset_index(drop=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 計算 item_1 對應到 item_2 的個別總數</span></span><br><span class="line">pair_counts = item_pairs.groupby([<span class="string">&#x27;item_1&#x27;</span>,<span class="string">&#x27;item_2&#x27;</span>]).size()</span><br><span class="line"><span class="comment"># 從大到小進行排序</span></span><br><span class="line">pair_counts = pair_counts.to_frame(name=<span class="string">&#x27;counts&#x27;</span>).reset_index().sort_values(<span class="string">&#x27;counts&#x27;</span>,ascending=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 篩選出其中的 item_A，就會列出想要優先推薦的 item 順序</span></span><br><span class="line">pair_counts</span><br></pre></td></tr></table></figure>
 
+<h2 id="客製化推薦-Personalized"><a href="#客製化推薦-Personalized" class="headerlink" title="客製化推薦 ( Personalized )"></a>客製化推薦 ( Personalized )</h2><h3 id="Item-Based-1"><a href="#Item-Based-1" class="headerlink" title="Item-Based"></a>Item-Based</h3><h4 id="內容過濾-Content-Based-Filtering"><a href="#內容過濾-Content-Based-Filtering" class="headerlink" title="內容過濾 ( Content-Based Filtering )"></a>內容過濾 ( Content-Based Filtering )</h4><p>針對商品內容進行分析，找出商品間的關聯性並進行分類 ( 利用商品屬性 Matrix，進行相似度分析 )，<br>可解決冷啟動問題 ( 解釋性、效果較佳 )，並且可針對用戶過去喜歡的商品，推薦類似品項給用戶。</p>
+<img src="/images/recommender_system/contentbased_filtering.jpg" width="50%">
 
-<p>這種交易模式所交易的標的需要有一定的波動性，<br>不能夠選擇長期盤整或波動性低的標的，<br>主要原因在於此交易模式都是等到價格有明確突破、跌破時，才會進場交易，<br>進場時，標的價格已漲過一段，趨勢很容易出現反轉，<br>可能造成才剛進場沒多久馬上就要減碼甚至是出場，<br>因此其勝率通常較左側交易低；<br>同時，在右側交易的交易模式中，投資者需要有果斷的交易紀律，<br>無論是在加碼、減碼、停損、停利等交易策略上，<br>都需要嚴格進行遵守，並遵循汰弱留強的標的篩選機制。</p>
-<p>優點：</p>
+<h5 id="特徵相似度-Feature-Similarity"><a href="#特徵相似度-Feature-Similarity" class="headerlink" title="特徵相似度 ( Feature Similarity )"></a>特徵相似度 ( Feature Similarity )</h5><p>適合用於推薦新用戶，當新用戶進入頁面時，可藉由一些判斷標準 ( 點選的商品、購買目的、用途等 )，<br>了解新用戶的興趣並進行推薦，不需等新用戶導覽完全部商品後再進行推薦。</p>
+<ul>
+<li>Jaccard Similarity ( Jaccard 相似度 )<br>所有聯集中，有多少比例是交集，判斷哪些商品出現的機率較高，但無不同商品間評分的差異。</li>
+</ul>
+<img src="/images/recommender_system/jaccard_similarity.jpg" width="20%">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> jaccard_score <span class="comment"># 使用 sklearn 的 matrics 來計算 jaccard 相似度</span></span><br><span class="line"><span class="keyword">from</span> scipy.spatial.distance <span class="keyword">import</span> pdist, squareform</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">user_item = &#123;</span><br><span class="line">    <span class="string">&#x27;user&#x27;</span>:[<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userC&#x27;</span>,<span class="string">&#x27;userC&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;item&#x27;</span>:[<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemC&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemD&#x27;</span>]</span><br><span class="line">&#125;</span><br><span class="line">user_item = pd.DataFrame(user_item)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 資料轉換成 dummy variable / one-hot encode</span></span><br><span class="line">user_item_crosstab = pd.crosstab(user_item[<span class="string">&#x27;item&#x27;</span>],user_item[<span class="string">&#x27;user&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 篩選資料類別</span></span><br><span class="line">item_A_crosstab = user_item_crosstab[user_item_crosstab.index == <span class="string">&#x27;itemA&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------------計算單一 jaccard 相似度------------- #</span></span><br><span class="line"><span class="comment"># 個別取出各自欄位的資料</span></span><br><span class="line">item_A_row = user_item_crosstab.loc[<span class="string">&#x27;itemA&#x27;</span>]</span><br><span class="line">item_B_row = user_item_crosstab.loc[<span class="string">&#x27;itemB&#x27;</span>]</span><br><span class="line">jaccard_score(item_A_row,item_B_row)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------------計算整張表格商品的相似度係數------------- #</span></span><br><span class="line"><span class="comment"># 計算所有商品間的 jaccard distance</span></span><br><span class="line">jaccard_distances = pdist(user_item_crosstab.values,metric=<span class="string">&#x27;jaccard&#x27;</span>)</span><br><span class="line"><span class="comment"># 將原本 Cn 取 2 的 array 轉換成 n * n 的矩陣</span></span><br><span class="line"><span class="comment"># 原先距離最遠會計算出 1，因此相似度就要以 1 - 原先值</span></span><br><span class="line">jaccard_sim_array = <span class="number">1</span> - squareform(jaccard_distances)</span><br><span class="line">jaccard_sim_df = pd.DataFrame(jaccard_sim_array,index=user_item_crosstab.index,columns=user_item_crosstab.index)</span><br><span class="line"><span class="comment"># 搜尋特定商品，並找出該商品與其他商品的相似度</span></span><br><span class="line">jaccard_sim_series = jaccard_sim_df.loc[<span class="string">&#x27;itemA&#x27;</span>]</span><br><span class="line">ordered_jaccard_sim = jaccard_sim_series.sort_values(ascending=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="文本相似度-Text-Based-Similarity"><a href="#文本相似度-Text-Based-Similarity" class="headerlink" title="文本相似度 ( Text-Based Similarity )"></a>文本相似度 ( Text-Based Similarity )</h5><p>以商品 text 為主，利用協同過濾 ( Item-based ) 對無特定 Feature 進行計算</p>
+<ul>
+<li>很多商品無法被分類或參照，僅有一些文字可作為參考，因此可藉由 NLP ( Nature Language Processing ) 領域的 TF-IDF ( Terms Frequency — Inverse Document Frequency ) 演算法，求出每篇文章或每個商品文案中，每個字詞的重要程度。</li>
+</ul>
+<img src="/images/recommender_system/tf_idf.jpg" width="50%">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer <span class="comment"># TF-IDF 套件</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">item_desc = &#123;</span><br><span class="line">    <span class="string">&#x27;item&#x27;</span>:[<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemC&#x27;</span>,<span class="string">&#x27;itemD&#x27;</span>,<span class="string">&#x27;itemE&#x27;</span>,<span class="string">&#x27;itemF&#x27;</span>,<span class="string">&#x27;itemG&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;desc&#x27;</span>:[<span class="string">&#x27;Inspected and guaranteed to have minimal cosmetic damage, which is not noticeable when the device is held at arms length. Successfully passed a full diagnostic test which ensures like-new functionality and removal of any prior-user personal information.&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;Includes a brand new, generic charging cable that is certified Mfi (Made for iPhone) and a brand new, generic wall plug that is UL certified for performance and safety. Also includes a SIM tray removal tool but does not come with headphones or a SIM card.&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;Tested for battery health and guaranteed to come with a battery that exceeds 90% of original capacity&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;This product is in &quot;Good condition&quot;. The screen has no scratches; body shows light scratches barely visible from 12 inches away.&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;Product will come with a SIM removal tool, a charger and a charging cable. Headphone and SIM card are not included.&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;This product is eligible for a replacement or refund within 90-day of receipt if it does not work as expected.&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;Successfully passed a full diagnostic test which ensures like-new functionality and removal of any prior-user personal information.&#x27;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最少出現在3篇以上才不算是停止詞（Stop words），若超過50%文件都有這個詞亦會被當作停止詞</span></span><br><span class="line">vectorizer = TfidfVectorizer(min_df=<span class="number">3</span>,max_df=<span class="number">0.5</span>)</span><br><span class="line"><span class="comment"># 詞頻轉換</span></span><br><span class="line">vectorized_data = vectorizer.fit_transform(item_desc[<span class="string">&#x27;desc&#x27;</span>]) <span class="comment"># 壓縮過後的稀疏矩陣（Sparse Matrix）</span></span><br><span class="line"><span class="comment"># vectorizer.get_feature_names() # 轉換後的詞類向量</span></span><br><span class="line"><span class="comment"># 將原本的稀疏矩陣轉換成array再轉換成DataFrame，並以原先的詞類向量來設定欄位名稱</span></span><br><span class="line">tfidf_df = pd.DataFrame(vectorized_data.toarray(),columns=vectorizer.get_feature_names())</span><br><span class="line">tfidf_df.index = item_desc[<span class="string">&#x27;item&#x27;</span>]</span><br><span class="line"><span class="comment"># 計算好所有的詞頻後，透過演算法餘弦相似度（Cosine Similarity）來進行計算</span></span><br><span class="line"><span class="comment"># 接續下一個 cell </span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Cosine Similarity 餘弦相似度<br>兩個向量之間的餘弦值，能夠透過歐基理得點積公式求出<img src="/images/recommender_system/cosine_1.jpg" width="20%">
+將兩邊同除兩向量的純量乘積後得出(類似標準化過程)
+<img src="/images/recommender_system/cosine_2.jpg" width="50%">
+Cosine Similarity
+<img src="/images/recommender_system/cosine.jpg" width="20%"></li>
+</ul>
+<p>餘弦值會介於 -1 ~ 1 之間，若兩個向量方向接近則會越接近 1 ，反方向則為 -1，而 0 代表兩者間是獨立的</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cosine_similarity_array = cosine_similarity(tfidf_df)</span><br><span class="line"><span class="comment"># 將資料轉換為 DF 型態以方便進行資料檢視與處理</span></span><br><span class="line">cosine_similarity_df = pd.DataFrame(cosine_similarity_array,index=tfidf_df.index,columns=tfidf_df.index)</span><br><span class="line"><span class="comment"># 搜尋出我們想要尋找的商品</span></span><br><span class="line">cosine_similarity_series = cosine_similarity_df.loc[<span class="string">&#x27;itemA&#x27;</span>]</span><br><span class="line"><span class="comment"># 將商品資料從高到低排序好</span></span><br><span class="line">ordered_similarities = cosine_similarity_series.sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 了解與 item_A 商品，最接近的商品推薦排序，並進行推薦</span></span><br><span class="line">ordered_similarities</span><br></pre></td></tr></table></figure>
+
+<h3 id="Item-x2F-User-Based"><a href="#Item-x2F-User-Based" class="headerlink" title="Item &#x2F; User-Based"></a>Item &#x2F; User-Based</h3><h4 id="協同過濾-Collaborative-Filtering"><a href="#協同過濾-Collaborative-Filtering" class="headerlink" title="協同過濾 ( Collaborative Filtering )"></a>協同過濾 ( Collaborative Filtering )</h4><p>演算法的計算資料，是來自於用戶對於特定商品的評分或購買項目</p>
+<img src="/images/recommender_system/collaborative_filtering.jpg" width="70%">
+
+<ul>
+<li><p>Memory-Based</p>
+<ul>
+<li><p>Item-Based<br>「買了什麼東西，還會買什麼東西」，這樣的情境其中一種解決方案就是使用協同過濾，透過用戶瀏覽過的商品決定如何進行推薦，如：喜歡A商品也喜歡B&#x2F;C&#x2F;D商品的用戶有多少，透過計算商品間的相似程度，並將相似的商品推薦給用戶。</p>
 <ol>
-<li>價格有明確突破、跌破時進行交易，時間成本較少。</li>
-<li>若嚴格遵守交易紀律，風險較低。</li>
-<li>持倉時間較短，資金週轉率高。</li>
+<li>發掘用戶潛在興趣</li>
+<li>推薦結果容易變化，缺乏穩定性</li>
+<li>冷啟動問題 ( Cold Start )，初期推薦效果非常差</li>
+<li>資料稀疏問題，需要以 KNN／MF 矩陣分解來解決</li>
 </ol>
-<p>缺點：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 透過前面的 TF-IDF Matrix (tfidf_df) 來選出用戶有選過的 item 並以加權平均把用戶的 Feature 計算出來，再計算 Cosine Similarity</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity</span><br><span class="line"></span><br><span class="line">user_item = &#123;</span><br><span class="line">    <span class="string">&#x27;user&#x27;</span>:[<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;item&#x27;</span>:[<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemC&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>]</span><br><span class="line">&#125;</span><br><span class="line">user_item = pd.DataFrame(user_item)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 篩選出用戶曾經買過的商品，每個商品總共被用戶買過幾次</span></span><br><span class="line">list_of_items = pd.DataFrame(user_item.groupby([<span class="string">&#x27;user&#x27;</span>,<span class="string">&#x27;item&#x27;</span>])[<span class="string">&#x27;item&#x27;</span>].count())</span><br><span class="line">list_of_items.columns = [<span class="string">&#x27;counts&#x27;</span>]</span><br><span class="line"><span class="comment"># 取一位用戶</span></span><br><span class="line">userA = list_of_items.loc[<span class="string">&#x27;userA&#x27;</span>].reset_index()</span><br><span class="line"><span class="comment"># 以 userA 計算加權 TF-IDF score</span></span><br><span class="line">tfidf_user_enjoyed = tfidf_df.reindex(userA.item.tolist())</span><br><span class="line"><span class="comment"># 計算 user 的 TF-IDF score</span></span><br><span class="line">tfidf_user_prob = tfidf_user_enjoyed.mean()</span><br><span class="line"><span class="comment"># 將用戶已瀏覽過的商品剔除 TF-IDF 矩陣外，以剩下的商品來計算餘弦相似度</span></span><br><span class="line">non_user_items = tfidf_df.drop(list_of_items.loc[<span class="string">&#x27;userA&#x27;</span>].index,axis=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># sklearn 預設只能讀取二維 array，使用 reshape 來轉換成僅有一列，而 -1 則是讓 numpy 自行計算總共要幾列(讓矩陣自動變成二維 array)</span></span><br><span class="line">cosine_similarity_userA = cosine_similarity(tfidf_user_prob.values.reshape(<span class="number">1</span>,-<span class="number">1</span>),non_user_items)</span><br><span class="line">user_prof_similarities_df = pd.DataFrame(cosine_similarity_userA.T,index=non_user_items.index,columns=[<span class="string">&#x27;similarity_score&#x27;</span>])</span><br><span class="line">sorted_similarity_df = user_prof_similarities_df.sort_values(by=<span class="string">&#x27;similarity_score&#x27;</span>,ascending=<span class="literal">False</span>)</span><br><span class="line">sorted_similarity_df</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>User-Based<br>「用於不同的商品間，用戶與用戶之間的相似度」，針對用戶興趣進行分析，找出相同類型的群體行為來進行決策，計算用戶間的相似程度 (ex: Cosine-Similarity )，並將用戶有興趣的商品(TopN)推薦給相似用戶；同時，需先蒐集用戶資訊，如：評價、購買記錄等</p>
+<ul>
+<li>對於所有的商品評分都減掉各自的平均，就會變成皮爾森相關係數 （ Pearson Correlation Coefficient ），比 Cosine Similarity 多減掉平均<img src="/images/recommender_system/pearson_correlation_coefficient.jpg" width="30%"></li>
+</ul>
 <ol>
-<li>獲利空間僅有中間的波段部分，且進場後容易出現反轉</li>
-<li>時常發生反轉(上沖下洗)可能會造成不斷停損時資金的耗損</li>
+<li>隨著資料累積時間增加，推薦系統會越來越穩定，且能在商品上架前計算演算法矩陣</li>
+<li>無法推薦用戶潛在感興趣的商品、特徵難以抽取，有冷啟動問題（Cold Start），沒有用戶資料便無法推薦</li>
+<li>資料稀疏問題，需要以 KNN／MF 矩陣分解來解決</li>
 </ol>
-<h3 id="交易一致性"><a href="#交易一致性" class="headerlink" title="交易一致性"></a>交易一致性</h3><p>在交易的過程中，交易一致性是非常重要的，<br>舉個例子來說，如果你做的是右側交易，<br>你必需遵守你所設定的交易紀律(策略)，可能包含：</p>
-<ol>
-<li>進場條件：突破價格進場做多、跌破價格進場做空等</li>
-<li>出場條件：觸及停利價格則停利出場、觸及停損價格則停損出場等</li>
-</ol>
-<p>嚴格遵守交易紀律說起來很容易，<br>但常常在投資者的心理上實踐並不容易，<br>設想今天進場的標的是台積電(2330.TW)，<br>當價格已經跌到你的交易策略中預計應該停損的位置，<br>但市場、媒體、投顧分析師等都告訴你現在是低點應該要進場，<br>並且對它未來的產業展望、企業營收等都具有正面的評價；<br>在這樣的情境下，<br>你能否堅持自己的交易紀律，果斷地去執行停損的動作，<br>如果你已經可以做到，那你在投資的道路上會順利許多，<br>如果你目前還無法做到，那這是你需要學習、練習的一部分。</p>
-<p>投資者保持自己的交易一致性是很重要的，遵循自己所設定好的交易紀律，<br><strong>進場前需預先想好進場的條件、價位，進場後需預先想好出場的條件、方式</strong>，<br>不被外在的因素(新聞、投顧分析師等)影響自己的交易策略，<br>當進場的理由消失、停損點到達時，就是要出場的時候，<br>這些都是作為投資者應該要有的交易紀律。</p>
-<p><code>tips:投資者必需嚴格遵守交易紀律，任何事情都不能影響這些規則</code></p>
-<p><br /><br />作者：Ian Chang <br />網址： [<a href="https://yuyaochang.github.io/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97">https://yuyaochang.github.io/2022/10/15/投資初心者系列</a> - 交易模式&#x2F;](<a href="https://yuyaochang.github.io/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97">https://yuyaochang.github.io/2022/10/15/投資初心者系列</a> - 交易模式&#x2F;) <br />版權聲明：Blog中所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/tw/">CC BY-NC-SA 3.0 TW</a> 許可協議，若要轉載請註明出處</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">user_item_rating = &#123;</span><br><span class="line">    <span class="string">&#x27;user&#x27;</span>:[<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userC&#x27;</span>,<span class="string">&#x27;userD&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userC&#x27;</span>,<span class="string">&#x27;userD&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;item&#x27;</span>:[<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemC&#x27;</span>,<span class="string">&#x27;itemD&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemC&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;rating&#x27;</span>:[<span class="number">5</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">3</span>]</span><br><span class="line">&#125;</span><br><span class="line">user_item_rating = pd.DataFrame(user_item_rating)</span><br><span class="line"></span><br><span class="line">user_ratings_pivot = user_item_rating.pivot(index=<span class="string">&#x27;user&#x27;</span>,columns=<span class="string">&#x27;item&#x27;</span>,values=<span class="string">&#x27;rating&#x27;</span>)</span><br><span class="line"><span class="comment"># 計算平均以中心化各項商品的評分，並將各用戶的數據減掉各自商品的平均</span></span><br><span class="line">avg_ratings = user_ratings_pivot.mean(axis=<span class="number">1</span>)</span><br><span class="line">user_ratings_pivot = user_ratings_pivot.sub(avg_ratings,axis=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 將沒有值的地方先簡單補上 0</span></span><br><span class="line">user_ratings_pivot_filled = user_ratings_pivot.fillna(<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 將矩陣轉置為計算 User 間的相似度，並傳入 DataFrame</span></span><br><span class="line">similarities = cosine_similarity(user_ratings_pivot_filled.T)</span><br><span class="line">user_ratings_cos = pd.DataFrame(similarities,index=user_ratings_pivot_filled.index,columns=user_ratings_pivot_filled.index)</span><br><span class="line"><span class="comment"># user_ratings_cos.apply(lambda x: round(x, 2))</span></span><br><span class="line"><span class="comment"># 獲得與 user_A 相似的用戶</span></span><br><span class="line">ordered_similarities_userA = user_ratings_cos.loc[<span class="string">&#x27;userA&#x27;</span>].sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line">ordered_similarities_userA</span><br></pre></td></tr></table></figure>
+
+<p>計算出 User-based 的 Cosine Similarity 矩陣後，會有許多地方出現遺漏值 ( Missing Value )，原因在於不是每個用戶都會對各個商品評分或按讚，因此需透過補值的方式來填補遺漏值，如： KNN 插值等。</p>
+<ul>
+<li>KNN (K-Nearest Neighbors)<br>以周圍指定的 K 個數中，佔比最多的那個類別就歸類為該類別，避免指定偶數項；當數字完全相同時，KNN 可能就會選不出來（如果以 Cosine 則可能比較難重複），或是會隨機從中挑一個出來。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsRegressor</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">user_item_rating = &#123;</span><br><span class="line">    <span class="string">&#x27;user&#x27;</span>:[<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userC&#x27;</span>,<span class="string">&#x27;userD&#x27;</span>,<span class="string">&#x27;userE&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;itemA&#x27;</span>:[<span class="number">5</span>,np.nan,<span class="number">3</span>,<span class="number">5</span>,<span class="number">2</span>],</span><br><span class="line">    <span class="string">&#x27;itemB&#x27;</span>:[<span class="number">5</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">4</span>],</span><br><span class="line">    <span class="string">&#x27;itemC&#x27;</span>:[<span class="number">4</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">5</span>]</span><br><span class="line">&#125;</span><br><span class="line">user_item_rating = pd.DataFrame(user_item_rating).set_index(<span class="string">&#x27;user&#x27;</span>)</span><br><span class="line">user_item_rating_df = user_item_rating.copy()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 將商品評分資料中，想要預測的商品資料欄位刪除</span></span><br><span class="line">user_item_rating.drop(<span class="string">&#x27;itemA&#x27;</span>,axis=<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 將我們想要預測的用戶資料翠取出來，之後 KNN 就會根據現有的這些欄位，來預測用戶其他沒有評分的分數</span></span><br><span class="line">target_user_x = user_item_rating.loc[[<span class="string">&#x27;userA&#x27;</span>]]</span><br><span class="line"><span class="comment"># 將尚未填補、含有 NaN 缺值的資料放到要用於訓練的 y</span></span><br><span class="line">other_users_y = user_item_rating_df[<span class="string">&#x27;itemA&#x27;</span>]</span><br><span class="line"><span class="comment"># 藉由前面有 NaN 的列，篩選出沒有 Nan 的資料行</span></span><br><span class="line">other_users_x = user_item_rating[other_users_y.notnull()]</span><br><span class="line"><span class="comment"># 將有 Nan 的去掉</span></span><br><span class="line">other_users_y.dropna(inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 初始化 KNN 模型，並以 cosine 相似度來計算（記得這裡的資料都還沒有計算與弦相似度）</span></span><br><span class="line">user_knn = KNeighborsRegressor(metric=<span class="string">&#x27;cosine&#x27;</span>,n_neighbors=<span class="number">4</span>)</span><br><span class="line"><span class="comment"># 訓練與預測 KNN 模型</span></span><br><span class="line">user_knn.fit(other_users_x,other_users_y)</span><br><span class="line">user_user_pred = user_knn.predict(target_user_x)</span><br><span class="line"><span class="comment"># 明確有預測結果的欄位，來預測特定 User 對特定欄位的評分值（這裡是 item_A）</span></span><br><span class="line"><span class="comment"># KNN Regression 則是將周圍的 10 個資料點用於計算平均後輸出</span></span><br><span class="line"><span class="comment"># 這個插值法一樣也能倒過來使用，亦即用原先用 User 的評價來補齊其他評價；這次則可以用其他商品來當作訓練集，來預測特定商品的分數</span></span><br><span class="line">user_user_pred</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Matrix Factorization<br>透過 KNN 填補用戶沒有填寫的評分，僅能用在商品品項不多的情況下；若商品品項較多、使用過該商品的比例非常低， KNN 所預測出來的值將會不準確，因此需使用矩陣分解（Matrix Factorization）來解決資料稀疏的問題，即透過 MF 可以將原本的矩陣拆解為兩個矩陣相乘 ( 用更少的資料來代表原本的矩陣 )，並抽取出特徵矩陣 ( User 特徵 + Item 特徵 )，其中 User 特徵又稱為潛藏特徵（Latent Factors）。<img src="/images/recommender_system/MF.jpg" width="80%">
+MF 分解雖然會造成資訊損失（Information Loss），但可以解決運算量、資料稀疏造成協同過濾演算法難以計算的困境，而如何使用 MF 拆開兩個矩陣，最常被應用的方法是奇異值分解（Singular Value Decomposition）。
+<img src="/images/recommender_system/MF_SVD.jpg" width="70%">
+SVD 為一種降維工具，可拆解成 U, Sigma, Vt 三個矩陣，而對角矩陣可以針對 U 和 Vt 進行線性變換，而 Sigma 則作為這兩個矩陣的中介，並且 Sigma 被稱為奇異值。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.linalg <span class="keyword">import</span> svd</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">user_item_rating = &#123;</span><br><span class="line">    <span class="string">&#x27;user&#x27;</span>:[<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userC&#x27;</span>,<span class="string">&#x27;userD&#x27;</span>,<span class="string">&#x27;userA&#x27;</span>,<span class="string">&#x27;userB&#x27;</span>,<span class="string">&#x27;userC&#x27;</span>,<span class="string">&#x27;userD&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;item&#x27;</span>:[<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemC&#x27;</span>,<span class="string">&#x27;itemD&#x27;</span>,<span class="string">&#x27;itemB&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemA&#x27;</span>,<span class="string">&#x27;itemC&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;rating&#x27;</span>:[<span class="number">5</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">3</span>]</span><br><span class="line">&#125;</span><br><span class="line">user_item_rating = pd.DataFrame(user_item_rating)</span><br><span class="line"></span><br><span class="line">user_ratings_pivot = user_item_rating.pivot(index=<span class="string">&#x27;user&#x27;</span>,columns=<span class="string">&#x27;item&#x27;</span>,values=<span class="string">&#x27;rating&#x27;</span>)</span><br><span class="line"><span class="comment"># 計算平均以中心化各項商品的評分，並將各用戶的數據減掉各自商品的平均</span></span><br><span class="line">avg_ratings = user_ratings_pivot.mean(axis=<span class="number">1</span>)</span><br><span class="line">user_ratings_pivot = user_ratings_pivot.sub(avg_ratings,axis=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 將沒有值的地方先簡單補上 0</span></span><br><span class="line">user_ratings_pivot_filled = user_ratings_pivot.fillna(<span class="number">0</span>).to_numpy()</span><br><span class="line"><span class="comment"># 計算 SVD 的三個矩陣</span></span><br><span class="line">U, sigma, Vt = svd(user_ratings_pivot_filled)</span><br><span class="line"><span class="comment"># 恢復原先的矩陣，將計算出的矩陣去中心化</span></span><br><span class="line">U_sigma_Vt = np.dot(np.dot(U,sigma),Vt)</span><br><span class="line">uncentered_ratings = U_sigma_Vt + avg_ratings.values.reshape(-<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">calc_pred_ratings_df = pd.DataFrame(uncentered_ratings,index=user_ratings_pivot.index,columns=user_ratings_pivot.columns)</span><br><span class="line"><span class="comment"># 以 SVD 進行預測推薦</span></span><br><span class="line">userA_ratings = calc_pred_ratings_df.loc[<span class="string">&#x27;userA&#x27;</span>,:].sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line">userA_ratings</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 檢驗 SVD 的表現程度</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 透過遮罩來藏起左上角的 3*3 的值</span></span><br><span class="line">actual_values = user_ratings_pivot.fillna(<span class="number">0</span>).iloc[:<span class="number">3</span>,:<span class="number">3</span>].values</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 以平均來預測左上角的 3*3 的值</span></span><br><span class="line">col_mean = np.nanmean(user_ratings_pivot.to_numpy(),axis=<span class="number">0</span>)</span><br><span class="line">inds = np.where(np.isnan(user_ratings_pivot.to_numpy()))</span><br><span class="line">user_ratings_pivot.to_numpy()[inds] = np.take(col_mean,inds[<span class="number">1</span>])</span><br><span class="line">avg_values = user_ratings_pivot.iloc[:<span class="number">3</span>,:<span class="number">3</span>].values</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 將上面 SVD 計算出來的矩陣取出遮罩 3*3 的範圍</span></span><br><span class="line">predicted_values = calc_pred_ratings_df.iloc[:<span class="number">3</span>,:<span class="number">3</span>].values</span><br><span class="line"></span><br><span class="line"><span class="comment"># 透過遮罩產生 Non-Nan 的真值矩陣</span></span><br><span class="line">mask = ~np.isnan(actual_values)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 比較單純透過平均和使用 SVD 的預測結果</span></span><br><span class="line"><span class="built_in">print</span>(mean_squared_error(actual_values[mask],avg_values[mask],squared=<span class="literal">False</span>))</span><br><span class="line"><span class="built_in">print</span>(mean_squared_error(actual_values[mask],predicted_values[mask],squared=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>Model-Based<br>透過用戶歷史紀錄訓練出模型進行預測，如：LSTM 預測時間序列，當今天看完第一集會想接續看第二、第三集等。</p>
+</li>
+</ul>
+<h5 id="如何選擇協同過濾要使用-User-Based-還是-Item-Based-呢？"><a href="#如何選擇協同過濾要使用-User-Based-還是-Item-Based-呢？" class="headerlink" title="如何選擇協同過濾要使用 User-Based 還是 Item-Based 呢？"></a>如何選擇協同過濾要使用 User-Based 還是 Item-Based 呢？</h5><p>  User-Based：通常推薦最熱門(點擊率最高)的商品，但該商品不一定是用戶最有興趣的。<br>  Item-Based：容易推薦長尾 (long-tail) 的商品(購買聲量不高，但會持續購買的商品)。</p>
+<ul>
+<li>Case1：電商擁有許多用戶資料(既有客戶、潛在客戶、沉睡客戶等)，若使用 User-Based 計算用戶相似度，將會耗費大量的時間，因此會使用 Item-Based 的協同過濾系統。</li>
+<li>Case2：部落格是以提供內容為主的網站，在推薦文章給讀者時，由於文章會一直更新，較適合使用 User-Based 的協同過濾系統。</li>
+</ul>
+<h4 id="混合推薦-Hybrid-Approach"><a href="#混合推薦-Hybrid-Approach" class="headerlink" title="混合推薦(Hybrid Approach)"></a>混合推薦(Hybrid Approach)</h4><ul>
+<li>不同商品適合不同的推薦方式，因此業界許多推薦系統都會混合不同的方法，如：結合內容過濾與協同過濾、結合機器學習演算法來建立推薦系統，以增進推薦的效率。</li>
+</ul>
+<hr>
+<h2 id="推薦系統的限制與缺點"><a href="#推薦系統的限制與缺點" class="headerlink" title="推薦系統的限制與缺點"></a>推薦系統的限制與缺點</h2><h3 id="冷啟動-Cold-Start"><a href="#冷啟動-Cold-Start" class="headerlink" title="冷啟動(Cold Start)"></a>冷啟動(Cold Start)</h3><p>碰到新用戶、新商品的情況下，沒有(被)使用或(被)瀏覽的商品，在某些推薦系統上將會發生無法推薦的窘境，我們該怎麼推薦商品？<br>解法：先以其他 Item-Based 的方式，透過新商品的屬性、新用戶的特徵來推薦給用戶，累積一定的使用資料後，再慢慢放入協同過濾所推薦的內容。</p>
+<ul>
+<li>冷門商品在協同過濾系統下，都不會成為推薦商品</li>
+<li>資料量不足以致於推薦系統效果不佳、無法使用</li>
+</ul>
+<h3 id="探索問題-Exploit-amp-Explore-EE"><a href="#探索問題-Exploit-amp-Explore-EE" class="headerlink" title="探索問題(Exploit &amp; Explore, EE)"></a>探索問題(Exploit &amp; Explore, EE)</h3><p>Exploit 是指使用已知用戶偏好來做分析； Explore 是指探索用戶未知的興趣或者偏好。<br>解法：部分使用模型預測、熱門、隨機等方法；而如何挑選，將透過商業角度或者AB test的方式進行。</p>
+<h3 id="資料稀疏-Data-Sparsity"><a href="#資料稀疏-Data-Sparsity" class="headerlink" title="資料稀疏(Data Sparsity)"></a>資料稀疏(Data Sparsity)</h3><p>某電商平台銷售同類型、過多相似的商品(資訊量過多)時，可能造成資料稀疏(Data Sparsity)的問題，即當用戶無法瀏覽大部分商品時，將會造成蒐集資料上的稀疏。</p>
+<hr>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>本篇文章大致講解推薦系統的基本概念，並附上 Python Code 的範例供參考 ( 數據為隨機值，運算結果可能會怪怪的 )；推薦系統的概念大致相同，應著重於如何將該系統、演算法應用於不同情境下，並解決當下的問題。</p>
+<ul>
+<li>一般應用：推薦系統是根據用戶相似度、商品相似度排序來進行推薦。</li>
+<li>實務應用：需依照想達成的目的、解決的問題來進行調整，如：透過推薦系統加深用戶付費深度等，不一定會只考慮相似度進行；同時，後續若要進行部署也是一大挑戰，需要考量到推薦系統的運算時間、資料的標準化、是否需要即時推薦等問題，以及系統的穩定性和成效追蹤，需要有完整的數據監控系統和 AB test 方法來進行。</li>
+</ul>
+<p><br /><br />作者：Ian Chang <br />網址： <a href="https://yuyaochang.github.io/2022/11/03/Recommendation_System_%E6%8E%A8%E8%96%A6%E7%B3%BB%E7%B5%B1%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%B4%B9_Python/">https://yuyaochang.github.io/2022/11/03/Recommendation_System_推薦系統概念介紹_Python&#x2F;</a> <br />版權聲明：Blog中所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/tw/">CC BY-NC-SA 3.0 TW</a> 許可協議，若要轉載請註明出處</p>
 ]]></content>
       <categories>
-        <category>Investment</category>
+        <category>推薦系統</category>
       </categories>
       <tags>
-        <tag>Investment, 投資初心者系列</tag>
+        <tag>Recommendation System</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -220,6 +284,67 @@
         <tag>Hexo</tag>
         <tag>Github</tag>
         <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>投資初心者系列-交易模式</title>
+    <url>/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97-%E4%BA%A4%E6%98%93%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>近年來投資市場越來越熱絡，<br>或許是因為多數人的理財觀念有所提升，知道把錢存在銀行會因為通貨膨脹而越變越薄；<br>又或是從過去的經驗來看把錢投入股市，長期而言，<br>股市將會不斷的上漲，即便跌得再深都有漲回來的一天。<br>(會不會每次都漲回來我自己持保留態度，後續有機會再探討這個議題)</p>
+<p>本系列希望講述一些投資相關基本知識以及我個人認為投資中最重要的事，<br>第一篇就先以交易模式作為主要介紹內容。</p>
+<h3 id="學投資的第一步應該要做什麼"><a href="#學投資的第一步應該要做什麼" class="headerlink" title="學投資的第一步應該要做什麼?"></a>學投資的第一步應該要做什麼?</h3><p>看到這個標題很多人會直覺回答：<strong>當然是學怎麼賺錢囉~</strong><span id="more"></span><br>我認為這句話對也不對，<br>許多人學投資的第一步是去了解：基本面分析、技術面分析、看投顧老師節目等，<br>試圖了解如何挑選到會上漲的標的，但往往不會考慮到背後的風險，<br>在投資的過程中，永遠要記住<strong>期望的報酬越高，風險將會越大</strong>；<br>而賺錢是希望透過投資達到的最終目的，<br>但想要達到這個目的會需要滿足很多種條件，<br>不只是單靠挑選到會上漲的標的就好，<br>還需要透過資金、風險管理等方式，做一些看錯方向時的停損、下跌保護等操作。<br><del>當然如果你非常厲害勝率100%永遠不會看錯方向…另當別論</del></p>
+<h3 id="交易模式"><a href="#交易模式" class="headerlink" title="交易模式"></a>交易模式</h3><p>投資最重要的事，其中之一就是<strong>交易模式</strong>。</p>
+<p>為什麼要了解交易模式？</p>
+<p>市場是由許多不同的人所組成的，<br>每個人所制定的交易邏輯、進出場策略以及對未來趨勢的看法都不一樣，<br><code>tips:市場上要有不同的操作、看法才會促成市場成交(流動性)</code><br>因此，制訂一套適合自已、擅長操作的交易模式是非常重要的。</p>
+<p>要了解自己的個性、風險承受度適合哪種交易模式，<br>首先，要先了解交易模式有哪些，<br>交易模式主要可以分成左側交易與右側交易。</p>
+<h4 id="左側交易-逆勢交易"><a href="#左側交易-逆勢交易" class="headerlink" title="左側交易(逆勢交易)"></a>左側交易(逆勢交易)</h4><p>左側交易(逆勢交易)的概念，<br>主要是<strong>在下跌時分批買入，在上漲時分批賣出</strong>，<br>這種交易模式又可稱為<strong>價值投資</strong>，<br>當標的下跌到合理價格範圍時，分批佈局；<br>左側交易比較適合具有長期投資(或搶反彈)、資金龐大、有耐心、心理素質強等因素的投資者，<br>這種交易模式較違反人性，<br>當標的下跌越多時，需要買入的部位越多，<br>因此挑選對標的、做好資金管理就是一件十分重要的事。</p>
+<img src="/images/Investment/左側交易.jpg" width="50%">
+
+<p>左側交易最害怕的是<strong>下跌時分批買入，最後股價沒有回升、被套牢</strong>，<br>因此，在挑選標的的部分：<br>標的要符合長期上行趨勢、體質強健等條件，<br>如果標的體質不夠強健，遇到熊市時，<br>無法保證標的是否能撐過熊市時期(如：股票下市、營收持續惡化等)；<br>如果長期不為上行趨勢，熬過下跌後，<br>後續上漲的機率可能相較於長期上行趨勢的標的來的低。</p>
+<p>而在資金管理的部分，<br>左側交易需要控制下跌時分批買入以及上漲時分批賣出的速度，<br>否則容易遇到在長期下跌的過程中，買入速度太快，導致平均持倉成本過高(套牢在高點)，<br>並且當標的價格較低時，已無資金可以進場壓低平均持倉成本；<br>又或者在上漲的過程中，賣出速度太快，導致錯過後續長期多頭的中後段漲幅(魚尾留給別人賺)。</p>
+<p>從資金管理的邏輯上，也將延伸出另一個問題，<br>左側交易需要了解目前標的價格是否在一個合理的價位，<br>或者說需要了解市場當下對該標的折溢價狀況是否合理，<br>這會需要有很多基本面(標的、總體經濟等)的相關知識才能夠進行判斷。</p>
+<p>優點：</p>
+<ol>
+<li>買在相對低點，長期持有勝率、獲利空間較大。</li>
+<li>較不會有滑價問題。</li>
+<li><del>標的價格遠離成本價後，可以安心睡覺。</del></li>
+</ol>
+<p>缺點：</p>
+<ol>
+<li>等待反彈並獲利所需要的時間很長、時間成本高。</li>
+<li>投資者需要有強大的心理素質，在下跌的過程中，堅持自己的交易決策。</li>
+</ol>
+<h4 id="右側交易-順勢交易"><a href="#右側交易-順勢交易" class="headerlink" title="右側交易(順勢交易)"></a>右側交易(順勢交易)</h4><p>右側交易(順勢交易)的概念，<br>主要是<strong>在上漲時分批買入，在下跌時分批賣出</strong>，<br>這種交易模式又可稱為<strong>動能交易</strong>，<br>當標的出現底部型態且已出現上漲趨勢時，分批買入，<br>待標的漲到頂部且已開始下跌時，分批賣出，<br>即不預測未來漲跌，只跟著市場趨勢順勢做交易；<br>這種交易模式較適合具有遵守交易紀律、做短線、做波段等因素的投資者。</p>
+<img src="/images/Investment/右側交易.jpg" width="50%">
+
+
+<p>這種交易模式所交易的標的需要有一定的波動性，<br>不能夠選擇長期盤整或波動性低的標的，<br>主要原因在於此交易模式都是等到價格有明確突破、跌破時，才會進場交易，<br>進場時，標的價格已漲過一段，趨勢很容易出現反轉，<br>可能造成才剛進場沒多久馬上就要減碼甚至是出場，<br>因此其勝率通常較左側交易低；<br>同時，在右側交易的交易模式中，投資者需要有果斷的交易紀律，<br>無論是在加碼、減碼、停損、停利等交易策略上，<br>都需要嚴格進行遵守，並遵循汰弱留強的標的篩選機制。</p>
+<p>優點：</p>
+<ol>
+<li>價格有明確突破、跌破時進行交易，時間成本較少。</li>
+<li>若嚴格遵守交易紀律，風險較低。</li>
+<li>持倉時間較短，資金週轉率高。</li>
+</ol>
+<p>缺點：</p>
+<ol>
+<li>獲利空間僅有中間的波段部分，且進場後容易出現反轉</li>
+<li>時常發生反轉(上沖下洗)可能會造成不斷停損時資金的耗損</li>
+</ol>
+<h3 id="交易一致性"><a href="#交易一致性" class="headerlink" title="交易一致性"></a>交易一致性</h3><p>在交易的過程中，交易一致性是非常重要的，<br>舉個例子來說，如果你做的是右側交易，<br>你必需遵守你所設定的交易紀律(策略)，可能包含：</p>
+<ol>
+<li>進場條件：突破價格進場做多、跌破價格進場做空等</li>
+<li>出場條件：觸及停利價格則停利出場、觸及停損價格則停損出場等</li>
+</ol>
+<p>嚴格遵守交易紀律說起來很容易，<br>但常常在投資者的心理上實踐並不容易，<br>設想今天進場的標的是台積電(2330.TW)，<br>當價格已經跌到你的交易策略中預計應該停損的位置，<br>但市場、媒體、投顧分析師等都告訴你現在是低點應該要進場，<br>並且對它未來的產業展望、企業營收等都具有正面的評價；<br>在這樣的情境下，<br>你能否堅持自己的交易紀律，果斷地去執行停損的動作，<br>如果你已經可以做到，那你在投資的道路上會順利許多，<br>如果你目前還無法做到，那這是你需要學習、練習的一部分。</p>
+<p>投資者保持自己的交易一致性是很重要的，遵循自己所設定好的交易紀律，<br><strong>進場前需預先想好進場的條件、價位，進場後需預先想好出場的條件、方式</strong>，<br>不被外在的因素(新聞、投顧分析師等)影響自己的交易策略，<br>當進場的理由消失、停損點到達時，就是要出場的時候，<br>這些都是作為投資者應該要有的交易紀律。</p>
+<p><code>tips:投資者必需嚴格遵守交易紀律，任何事情都不能影響這些規則</code></p>
+<p><br /><br />作者：Ian Chang <br />網址： <a href="https://yuyaochang.github.io/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97-%E4%BA%A4%E6%98%93%E6%A8%A1%E5%BC%8F/">https://yuyaochang.github.io/2022/10/15/投資初心者系列-交易模式/</a> <br />版權聲明：Blog中所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/tw/">CC BY-NC-SA 3.0 TW</a> 許可協議，若要轉載請註明出處</p>
+]]></content>
+      <categories>
+        <category>Investment</category>
+      </categories>
+      <tags>
+        <tag>Investment</tag>
+        <tag>投資初心者系列</tag>
       </tags>
   </entry>
 </search>
