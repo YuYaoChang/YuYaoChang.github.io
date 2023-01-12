@@ -1,6 +1,249 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Apache_Airflow_介紹及使用</title>
+    <url>/2023/01/12/Apache_Airflow_%E4%BB%8B%E7%B4%B9%E5%8F%8A%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>隨著工作上資料量、流程複雜度持續的增加，使用 Crontab 管理自動更新排程，已無法順利進行資料更新。<br>容易遇到前一個工作尚未進行完，下一個工作又要開始執行，且下一個工作需要使用上一個工作所產生的資料；<br>若繼續使用 Crontab 則會遇到資料量持續增加，而打亂自動更新排程，要常常調整排程時間設定來緩解這個情形，<br>因此，這次透過導入 Airflow 來解決此問題。</p>
+<h2 id="Airflow-介紹"><a href="#Airflow-介紹" class="headerlink" title="Airflow 介紹"></a>Airflow 介紹</h2><p>Airflow 是一個工作流程管理系統(Workflow Management System)，將有相關的工作整合為一個有向無循環圖 DAG (Directed Acyclic Graph)，並提供多種 Operator，例如 Bash Operator、Python Operator 等，甚至可直接對 GCP、S3、Slack 等進行操作；DAG 是一個 Python 程式，可達到 Infrastructure as code，減少維運上的複雜度。<br><img src="/images/airflow/airflow_structure.png"><br>圖片來源：<a href="https://3lexw.medium.com/apache-airflow-2-1-%E5%9F%BA%E7%A4%8E%E6%95%99%E5%AD%B8-2-%E5%AE%89%E8%A3%9D%E5%8F%8A%E5%9F%BA%E7%A4%8E%E8%A8%AD%E5%AE%9A-5622f7cff10d">3LexW</a></p>
+<span id="more"></span>
+<ul>
+<li>Airflow 主要的元件</li>
+</ul>
+<ol>
+<li>Airflow Webserver<br>提供圖形化介面，可快速看到排程執行的狀態、Log 或是手動執行等。</li>
+<li>Airflow Scheduler<br>負責排程，從 Metadata Database 中找尋 DAG 跟 Task 的狀態，並判斷要將哪些 Task 傳送給 Executor 安排執行。</li>
+<li>Airflow Executor<br>Executor 是一個 Queue Process，從 Scheduler 接收要執行的 Task，並將這些資訊存進 Queue，並從 Queue 中取出 Task 安排給閒置的 Worker 執行。</li>
+<li>Airflow Worker<br>實際的排程工作就交由 Worker 來執行，同一個 Airflow cluster 中可以有多個 Worker，並且可透過指定 worker queue 使工作能在特定的資源上運作，而所有資料都被存在 Metadata Database 裡。</li>
+<li>Metadata Database<br>儲存 DAG 執行的資訊、狀態 以及 Airflow 本身的設定如用戶、連線等設定。Web Server 顯示的資訊就是從 Metadata DB 來的，而 Scheduler 也會更新這些資訊到 DB 讓 Web 和 Scheduler 可以同步。</li>
+</ol>
+<ul>
+<li>優點</li>
+</ul>
+<ol>
+<li>清晰易懂的管理介面</li>
+<li>現成的 Operator 方便串接各式系統</li>
+<li>較容易管理複雜的工作流程</li>
+<li>Workflow as Code</li>
+<li>各個工作失敗時自動重試</li>
+<li>可設置失敗提醒(Email、Slack等)</li>
+</ol>
+<ul>
+<li>缺點</li>
+</ul>
+<ol>
+<li>多一套系統需維護</li>
+<li>需設定一些相依服務（資料庫、RabbitMQ 之類的）</li>
+<li>部署多組 Worker 時較麻煩</li>
+<li>只能使用 pools 去限制同時有多少的 DAG 在運作，無法直接分配相應的 CPU 數量和 memory 大小</li>
+</ol>
+<hr>
+<h2 id="Airflow-安裝"><a href="#Airflow-安裝" class="headerlink" title="Airflow 安裝"></a>Airflow 安裝</h2><h3 id="pip-安裝"><a href="#pip-安裝" class="headerlink" title="pip 安裝"></a>pip 安裝</h3><ol>
+<li>Airflow 最簡單的安裝方法就是使用 pip 安裝<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 安裝完整相關套件</span><br><span class="line">$pip3 install apache-airflow</span><br><span class="line"></span><br><span class="line"># 只要安裝部分相關套件(只安裝 celery, slack, redis)</span><br><span class="line">$pip3 install apache-airflow[celery,slack,redis]</span><br></pre></td></tr></table></figure></li>
+<li>安裝後可執行初始化資料庫的指令，即可使用 sqlite 來儲存設定與 log 等<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow initdb</span><br></pre></td></tr></table></figure></li>
+<li>可透過編輯預設路徑中 <code>$home/airflow/airflow.cfg</code> 的設定，改為使用 MySQL 等資料庫<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># airflow.cfg</span><br><span class="line">sql_alchemy_conn = mysql://DB_USERNAME:DB_PASSWORD@DB_HOST:DB_PORT/DB_database</span><br><span class="line"></span><br><span class="line"># 更改完再初始化一次資料庫</span><br><span class="line">$airflow initdb</span><br></pre></td></tr></table></figure></li>
+<li>可用 command line 指令來啟動，也可以使用 systemd 等方式來管理<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow webserver</span><br><span class="line">$airflow scheduler</span><br><span class="line">$airflow worker</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="使用-docker-compose-安裝-推"><a href="#使用-docker-compose-安裝-推" class="headerlink" title="使用 docker compose 安裝 (推)"></a>使用 docker compose 安裝 (推)</h3><ol>
+<li>建置 Airflow 環境</li>
+</ol>
+<ul>
+<li>新建資料夾<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$mkdir airflow</span><br><span class="line">$cd airflow</span><br></pre></td></tr></table></figure></li>
+<li>下載官方提供 docker-compose 文件<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 以 Airflow 2.5.0 為例</span><br><span class="line">$curl -LfO &#x27;https://airflow.apache.org/docs/apache-airflow/2.5.0/docker-compose.yaml&#x27;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在 docker-compose.yaml 設定環境變數<br>Airflow 提供了透過環境變數傳遞設定值的做法，格式上會像 <code>AIRFLOW__&lt;which part&gt;__&lt;which key&gt;</code><br>若設定 core 裡面的 sql_alchemy_conn，就會像是<code>export AIRFLOW__CORE__SQL_ALCHEMY_CONN=your database</code><br>調整時區則是在 environment 部分加入 <code>AIRFLOW__CORE__DEFAULT_TIMEZONE: &#39;Asia/Taipei&#39;</code></p>
+</blockquote>
+</li>
+<li>產生相依目錄並設定 Airflow 使用者權限<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$mkdir -p ./dags ./logs ./plugins</span><br><span class="line">$echo -e &quot;AIRFLOW_UID=$(id -u)&quot; &gt; .env</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li>資料庫初始化<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$docker-compose up airflow-init</span><br></pre></td></tr></table></figure></li>
+<li>啟動 Airflow 服務<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$docker-compose up -d</span><br><span class="line">$docker-compose ps # check it</span><br></pre></td></tr></table></figure></li>
+<li>下載 airflow 命令工具<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$curl -LfO &#x27;https://airflow.apache.org/docs/apache-airflow/2.5.0/airflow.sh&#x27;</span><br><span class="line">$chmod +x airflow.sh</span><br></pre></td></tr></table></figure></li>
+<li>撰寫 dags 程式<br>將 dags 程式放置於 Container 掛載目錄 dags，後面會再談到如何撰寫 dags 程式。</li>
+<li>透過 airflow.sh 執行 DAG 程式<br>建立運行 python container <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$./airflow.sh bash</span><br></pre></td></tr></table></figure>
+執行 python 檔案<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$python dags/file.py</span><br></pre></td></tr></table></figure></li>
+<li>網頁中查看新建立的 DAG<br>Airflow Web Server<br><a href="http://localhost:8080/">http://localhost:8080</a></li>
+<li>REST API<br>使用 <a href="https://airflow.apache.org/docs/apache-airflow/stable/stable-rest-api-ref.html">Airflow REST API</a> 可以取代在 WebUI 上的工作，進行 DAG 的抓取執行刪除等工作<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$curl -X GET &#x27;http://&lt;主機&gt;:8080/api/v1/dags&#x27; --user &quot;airflow:airflow&quot;</span><br></pre></td></tr></table></figure>
+回傳<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;dag_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;file_token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;fileloc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/opt/airflow/dags/file.py&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;is_active&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;is_paused&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;is_subdag&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;owners&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;root_dag_id&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;schedule_interval&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;__type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;TimeDelta&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;days&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;microseconds&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;seconds&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="DAG-Directed-Acyclic-Graph"><a href="#DAG-Directed-Acyclic-Graph" class="headerlink" title="DAG (Directed Acyclic Graph)"></a>DAG (Directed Acyclic Graph)</h2><p>Airflow 只需使用最基本的 Bash Operator (其他的 Operator 後續將會介紹)，即可執行工作排程，而 Dag 建立的部分，除了直接拉變數出來建立，也可以透過以下兩種方式建立：</p>
+<ol>
+<li>透過 with 建立 Dag<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dag = DAG(dag_id=<span class="string">&quot;first_dag&quot;</span>, tags=[<span class="string">&#x27;user&#x27;</span>], start_date=datetime.today())</span><br><span class="line"><span class="keyword">with</span> dag:</span><br><span class="line">    start_task = EmptyOperator(task_id=<span class="string">&quot;start_task&quot;</span>)</span><br><span class="line">    end_task = EmptyOperator(task_id=<span class="string">&quot;end_task&quot;</span>)</span><br><span class="line">    first_task = BashOperator(task_id=<span class="string">&quot;first_task&quot;</span>,</span><br><span class="line">                              bash_command=<span class="string">f&quot;echo execute time: <span class="subst">&#123;datetime.now()&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+<li>透過 decorator 建立 Dag<br>需要於外部將該 Dag 的函式丟給一個變數，airflow 才可以抓到該 Dag<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> airflow.decorators <span class="keyword">import</span> dag</span><br><span class="line"></span><br><span class="line"><span class="meta">@dag(<span class="params">tags=[<span class="string">&#x27;user&#x27;</span>], start_date=datetime.today(<span class="params"></span>)</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">simple_dag</span>():</span><br><span class="line">    start_task = EmptyOperator(task_id=<span class="string">&quot;start_task&quot;</span>)</span><br><span class="line">    end_task = EmptyOperator(task_id=<span class="string">&quot;end_task&quot;</span>)</span><br><span class="line">    first_task = BashOperator(task_id=<span class="string">&quot;first_task&quot;</span>,</span><br><span class="line">                              bash_command=<span class="string">f&quot;echo execute time: <span class="subst">&#123;datetime.now()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">my_dag = simple_dag()</span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li><a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html">dag 參數</a>、<a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html">operator 參數</a></li>
+</ul>
+<p>完成 DAG 程式，可直接放入 airflow.cfg 指定的 DAG 資料夾，並且在介面上點選啟用即可</p>
+<h5 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h5><p>完整 DAG 程式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> airflow <span class="keyword">import</span> DAG</span><br><span class="line"><span class="keyword">from</span> airflow.operators.bash_operator <span class="keyword">import</span> BashOperator</span><br><span class="line"></span><br><span class="line"><span class="comment"># default setting</span></span><br><span class="line">default_args = &#123;</span><br><span class="line">    <span class="string">&#x27;owner&#x27;</span>: <span class="string">&#x27;OWNER_NAME&#x27;</span>, <span class="comment"># dag 管理者名稱</span></span><br><span class="line">    <span class="string">&#x27;depends_on_past&#x27;</span>: <span class="literal">False</span>,</span><br><span class="line">    <span class="string">&#x27;start_date&#x27;</span>: airflow.utils.dates.days_ago(<span class="number">3</span>), <span class="comment"># 開始時間可使用相對時間，也可使用絕對時間</span></span><br><span class="line">    <span class="string">&#x27;email&#x27;</span>: [<span class="string">&#x27;OWNER_EMAIL&#x27;</span>], <span class="comment"># 要寄的 email</span></span><br><span class="line">    <span class="string">&#x27;email_on_failure&#x27;</span>: <span class="literal">False</span>, <span class="comment"># 失敗時寄 email</span></span><br><span class="line">    <span class="string">&#x27;email_on_retry&#x27;</span>: <span class="literal">False</span>, <span class="comment"># 重試時寄 email</span></span><br><span class="line">    <span class="string">&#x27;retries&#x27;</span>: <span class="number">1</span>, <span class="comment"># 執行失敗時，要重試多少次</span></span><br><span class="line">    <span class="string">&#x27;retry_delay&#x27;</span>: timedelta(minutes=<span class="number">5</span>), <span class="comment"># 執行失敗時，過多久才重試</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># dag setting</span></span><br><span class="line">dag = DAG(</span><br><span class="line">    <span class="string">&#x27;example&#x27;</span>,</span><br><span class="line">    default_args=default_args,</span><br><span class="line">    description=<span class="string">&#x27;Example&#x27;</span>,</span><br><span class="line">    schedule_interval=<span class="string">&#x27;10 * * * *&#x27;</span>) <span class="comment"># 排程週期：直接按照 cron 的時間格式</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 第一次的執行 DAG 的時間是 start_date + schedule_interval，但執行的 execution_date 將會是前一天</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># define tasks</span></span><br><span class="line">start_task = EmptyOperator(task_id=<span class="string">&quot;start_task&quot;</span>)</span><br><span class="line"></span><br><span class="line">task1 = BashOperator(</span><br><span class="line">    task_id=<span class="string">&#x27;task_1&#x27;</span>,</span><br><span class="line">    bash_command=<span class="string">&#x27;/path/to/script/one.sh&#x27;</span>,</span><br><span class="line">    dag=dag)</span><br><span class="line"></span><br><span class="line">task2 = BashOperator(</span><br><span class="line">    task_id=<span class="string">&#x27;task_1&#x27;</span>,</span><br><span class="line">    bash_command=<span class="string">&#x27;/path/to/script/two.sh&#x27;</span>,</span><br><span class="line">    dag=dag)</span><br><span class="line"></span><br><span class="line">task3 = BashOperator(</span><br><span class="line">    task_id=<span class="string">&#x27;task_1&#x27;</span>,</span><br><span class="line">    bash_command=<span class="string">&#x27;/path/to/script/three.sh&#x27;</span>,</span><br><span class="line">    dag=dag)</span><br><span class="line"></span><br><span class="line">end_task = EmptyOperator(task_id=<span class="string">&quot;end_task&quot;</span>)</span><br><span class="line"></span><br><span class="line">start_task &gt;&gt; task1 &gt;&gt; [task2,task3] &gt;&gt; end_task</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>‘start_date’ : datetime(2022, 1, 1, 0, 0)，執行時間將在 2022-01-02 做第一次執行<br>邏輯：在 2022-01-01 23:59 結束以後，也就是 2022-01-02 00:00 的時候，將 2022-01-01 所有的使用者資料做彙總</p>
+</blockquote>
+<h3 id="task-狀態"><a href="#task-狀態" class="headerlink" title="task 狀態"></a>task 狀態</h3><p><img src="https://i.imgur.com/gW6GGrd.png"><br>圖片來源：<a href="https://tw.coderbridge.com/series/c012cc1c8f9846359bb9b8940d4c10a8/posts/3d1f5ea33f5f4a3bac33f95099e376e8">FrankYang0529</a></p>
+<ul>
+<li>No status<br>當手動 Trigger DAG 或是 Scheduler 排程 DAG 後，DAG 的 Task 會先被創造成 Task Instance 並寫進 Database</li>
+<li>Scheduled<br>當 Scheduler 確認某個 Task 需要被執行時，這時 Task 的狀態就會變成 Scheduled</li>
+<li>Queued<br>當 Scheduler 把確定要執行的 Task 發送給 Executor 時，相當於把 Task 放入 Queue 裡</li>
+<li>Running<br>Executor 將 Task 發送給閒置的 Worker</li>
+<li>執行的結果<br>透過 Executor 將 Task 標示成 Success 或是 Failed</li>
+</ul>
+<h3 id="Operator"><a href="#Operator" class="headerlink" title="Operator"></a>Operator</h3><p><a href="https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/index.html">Basic Operator</a></p>
+<ul>
+<li>Pools<br>資源控管用的變數，能夠限定執行的 operator 數量，在 UI 上新增一個 Pool<br>在 operator 設定 pool 參數<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">extract_product = MyPostgresOperator(</span><br><span class="line">    sql=<span class="string">&#x27;select_product.sql&#x27;</span></span><br><span class="line">    task_id=<span class="string">&#x27;extract_product&#x27;</span>,</span><br><span class="line">    pool=<span class="string">&#x27;pool_name&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="BranchPythonOperator"><a href="#BranchPythonOperator" class="headerlink" title="BranchPythonOperator"></a>BranchPythonOperator</h4><p>可以透過回傳的文字，決定下一個 Task 要執行什麼</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">branching = BranchPythonOperator(</span><br><span class="line">    task_id=<span class="string">&#x27;branching&#x27;</span>,</span><br><span class="line">    python_callable=<span class="keyword">lambda</span> **context: <span class="string">&#x27;store_in_redis&#x27;</span> <span class="keyword">if</span> <span class="built_in">int</span>(context[<span class="string">&#x27;task_instance&#x27;</span>].xcom_pull(task_ids=<span class="string">&#x27;get_timestamp&#x27;</span>)) % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">else</span> <span class="string">&#x27;skip&#x27;</span>,</span><br><span class="line">    provide_context=<span class="literal">True</span>,</span><br><span class="line">    dag=dag,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="自創-Operator"><a href="#自創-Operator" class="headerlink" title="自創 Operator"></a>自創 Operator</h4><p>Airflow 提供<a href="https://airflow.apache.org/docs/apache-airflow/stable/howto/custom-operator.html">自定義 Operator</a></p>
+<p>Operator 路徑：預設在 <code>&#123;AIRFLOW_HOME&#125;/plugins</code></p>
+<p>自定義的 Operator 會繼承 BaseOperator，只需要在 Constructor 中定義要傳入的參數，並實作 execute 函式就能完成 Operator 的基礎功能</p>
+<h5 id="範例-1"><a href="#範例-1" class="headerlink" title="範例"></a>範例</h5><p>目標：讓 Operator 可以傳入使用者的名字，並且在執行時紀錄跟使用者打招呼的時間</p>
+<p>在 Constructor 中，可使用 Airflow 定義好的裝飾器 <code>@apply_defaults</code>；透過 <code>@apply_defaults</code> 可幫 Operator 載入 Default Arguments，並存放在 kwargs[‘params’]，讓我們可以在 constructor 中調用。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">GreetOperator</span>(<span class="title class_ inherited__">BaseOperator</span>):</span><br><span class="line"></span><br><span class="line"><span class="meta">    @apply_defaults</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">            self,</span></span><br><span class="line"><span class="params">            name: <span class="built_in">str</span>,</span></span><br><span class="line"><span class="params">            *args, **kwargs</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="built_in">super</span>().__init__(*args, **kwargs)</span><br><span class="line">        self.name = name</span><br></pre></td></tr></table></figure>
+
+<p>execute 函式帶有 context 變數，context 帶有一些功能，像是 ti 或 task_instance 代表 TaskInstance，透過 TaskInstance 可以跟 XCom 互動</p>
+<ul>
+<li>params<br>透過 params 可以傳遞自定義的參數進去 Task，在 Task 中，我們可以從 context.params 拿到這些參數<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dag = DAG(</span><br><span class="line">    ...,</span><br><span class="line">    params=&#123;</span><br><span class="line">        <span class="string">&quot;s3_bucket&quot;</span>: <span class="string">&quot;test&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li>Variables<br>在 WebServer 的 Admin → Variables 頁面看到，使用 key value 形式創造 Variable；可以是 json 的格式，因此可以用一個 Variable 就設定好一個 DAG 所需的全部參數，並在 DAG 裡面，透過 <code>Variable.get(&quot;some key&quot;)</code> 拿到 Variable。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dag = DAG(</span><br><span class="line">    ...,</span><br><span class="line">    params=Variable.get(<span class="string">&quot;test&quot;</span>, deserialize_json=<span class="literal">True</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li>Connections<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> airflow.hooks.base_hook <span class="keyword">import</span> BaseHook</span><br><span class="line">redis_password = BaseHook.get_connection(<span class="string">&#x27;redis_default&#x27;</span>).password</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>在 Operator 中，執行結束回傳的值會被記錄在 XCom 的 return_value 裡，可以透過 TaskInstance 的 xcom_push 功能，存入其他的值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">self, context</span>):</span><br><span class="line">    message = <span class="string">&quot;Hello &#123;&#125;&quot;</span>.<span class="built_in">format</span>(self.name)</span><br><span class="line">    context[<span class="string">&#x27;ti&#x27;</span>].xcom_push(key=<span class="string">&#x27;time&#x27;</span>, value=datetime.now().timestamp())</span><br><span class="line">    <span class="built_in">print</span>(message)</span><br><span class="line">    <span class="keyword">return</span> message</span><br></pre></td></tr></table></figure>
+
+<p>定義 Airflow Plugin，讓我們待會再可以在 DAG 中引入我們的 Operator</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AirflowTestPlugin</span>(<span class="title class_ inherited__">AirflowPlugin</span>):</span><br><span class="line">    name = <span class="string">&#x27;greet_operator&#x27;</span></span><br><span class="line">    operators = [GreetOperator]</span><br></pre></td></tr></table></figure>
+
+<p>完整 code</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> airflow.plugins_manager <span class="keyword">import</span> AirflowPlugin</span><br><span class="line"><span class="keyword">from</span> airflow.models.baseoperator <span class="keyword">import</span> BaseOperator</span><br><span class="line"><span class="keyword">from</span> airflow.utils.decorators <span class="keyword">import</span> apply_defaults</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GreetOperator</span>(<span class="title class_ inherited__">BaseOperator</span>):</span><br><span class="line"></span><br><span class="line"><span class="meta">    @apply_defaults</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">            self,</span></span><br><span class="line"><span class="params">            name: <span class="built_in">str</span>,</span></span><br><span class="line"><span class="params">            *args, **kwargs</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="built_in">super</span>().__init__(*args, **kwargs)</span><br><span class="line">        self.name = name</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">self, context</span>):</span><br><span class="line">        message = <span class="string">&quot;Hello &#123;&#125;&quot;</span>.<span class="built_in">format</span>(self.name)</span><br><span class="line">        context[<span class="string">&#x27;ti&#x27;</span>].xcom_push(key=<span class="string">&#x27;time&#x27;</span>, value=datetime.now().timestamp())</span><br><span class="line">        <span class="built_in">print</span>(message)</span><br><span class="line">        <span class="keyword">return</span> message</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AirflowTestPlugin</span>(<span class="title class_ inherited__">AirflowPlugin</span>):</span><br><span class="line">    name = <span class="string">&#x27;greet_operator&#x27;</span></span><br><span class="line">    operators = [GreetOperator]</span><br></pre></td></tr></table></figure>
+
+<h3 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h3><p>Airflow Executor <a href="https://docs.astronomer.io/learn/airflow-executors-explained">(不同 Executor 比較)</a></p>
+<ul>
+<li>Local Executor：單機版的 Executor，可透過 MultiProcess 同時運行多個 Worker</li>
+<li>Celery Executor：使用 Celery 分散式的 Task Queue 當作 Executor，所以可以在多台電腦同時運行多個 Worker<br><img src="https://i.imgur.com/RtTHUB4.png"></li>
+<li>Kubernetes Executor：透過 Kubernetes API 為每個工作開啟一個 Pod，工作完成後就會砍掉，可以跟據每個工作分配不同的 CPU、memory、設定等，達到資源利用最大化<br><img src="https://i.imgur.com/AB1V8pg.png"><br><img src="https://i.imgur.com/Cznu44B.png"></li>
+</ul>
+<p><em><strong>這部分目前筆者著墨不多，後續有碰到再寫篇文章說明</strong></em></p>
+<h4 id="Kuberentes-Executor"><a href="#Kuberentes-Executor" class="headerlink" title="Kuberentes Executor"></a>Kuberentes Executor</h4><p><a href="https://tw.coderbridge.com/series/c012cc1c8f9846359bb9b8940d4c10a8/posts/aecbf64852184efc8674d47bebe823aa">https://tw.coderbridge.com/series/c012cc1c8f9846359bb9b8940d4c10a8/posts/aecbf64852184efc8674d47bebe823aa</a></p>
+<h3 id="XCOM"><a href="#XCOM" class="headerlink" title="XCOM"></a>XCOM</h3><p>task_1 會將執行結果存到database，task_2 再從database來取得其執行結果，這便是 Xcom 的使用方式(以PythonOperator為例):</p>
+<ol>
+<li>設定operator的參數 <code>provide_context=True</code><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">my_operator = PythonOperator(</span><br><span class="line">    task_id=<span class="string">&#x27;my_task&#x27;</span>,</span><br><span class="line">    python_callable=func,</span><br><span class="line">    provide_context=<span class="literal">True</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li>使用方式</li>
+</ol>
+<ul>
+<li>在 function 使用<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">**context</span>):</span><br><span class="line">    ti = context[<span class="string">&#x27;task_instance&#x27;</span>]</span><br><span class="line">    previous_result = ti.xcom_pull(task_ids=<span class="string">&#x27;previous_work&#x27;</span>) <span class="comment"># 得到上游的執行結果(key的default值為&#x27;return_value&#x27;)</span></span><br><span class="line">    new_result = previous_result + <span class="number">100</span> <span class="comment"># 得到的新結果</span></span><br><span class="line">    ti.xcom_push(key=<span class="string">&#x27;xcom_push&#x27;</span>, value=new_result) <span class="comment"># 存入Xcom(key=&#x27;xcom_push&#x27;)</span></span><br><span class="line">    <span class="keyword">return</span> new_result <span class="comment"># return 也會存到Xcom(key=&#x27;return_value&#x27;)</span></span><br></pre></td></tr></table></figure></li>
+<li>使用其他 Operator<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">t2 = BashOperator(</span><br><span class="line">    task_id=<span class="string">&#x27;t2&#x27;</span>, </span><br><span class="line">    bash_command=<span class="string">&#x27;echo &quot;&#123;&#123; ti.xcom_pull(&quot;t1&quot;) &#125;&#125;&quot;&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>XCom 的所有資料在 pickle 之後會被存到 Airflow 的 Metadata Database，因此不適合交換太大的數據</p>
+</blockquote>
+<h3 id="重複利用-Python-function"><a href="#重複利用-Python-function" class="headerlink" title="重複利用 Python function"></a>重複利用 Python function</h3><p>利用一個 Python 函式 process_metadata 專門負責讀 &#x2F; 寫使用者的閱讀紀錄，兩個 Airflow 工作的 python_callable 都呼叫 process_metadata，利用不同的 op_args 來使用 process_metadata 函式的不同功能：</p>
+<ul>
+<li>get_read_history 負責讀取閱讀紀錄</li>
+<li>update_read_history 負責更新閱讀紀錄</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">process_metadata</span>(<span class="params">mode, **context</span>):</span><br><span class="line">    <span class="keyword">if</span> mode == <span class="string">&#x27;read&#x27;</span>:</span><br><span class="line">        ...</span><br><span class="line">    <span class="keyword">elif</span> mode == <span class="string">&#x27;write&#x27;</span>:</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> DAG(<span class="string">&#x27;comic_app_v3&#x27;</span>, default_args=default_args) <span class="keyword">as</span> dag:</span><br><span class="line"></span><br><span class="line">    get_read_history = PythonOperator(</span><br><span class="line">        task_id=<span class="string">&#x27;get_read_history&#x27;</span>,</span><br><span class="line">        python_callable=process_metadata,</span><br><span class="line">        op_args=[<span class="string">&#x27;read&#x27;</span>],</span><br><span class="line">        provide_context=<span class="literal">True</span></span><br><span class="line">		)       </span><br><span class="line"></span><br><span class="line">    update_read_history = PythonOperator(</span><br><span class="line">        task_id=<span class="string">&#x27;update_read_history&#x27;</span>,</span><br><span class="line">        python_callable=process_metadata,</span><br><span class="line">        op_args=[<span class="string">&#x27;write&#x27;</span>],</span><br><span class="line">        provide_context=<span class="literal">True</span></span><br><span class="line">		)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Trigger-Rules"><a href="#Trigger-Rules" class="headerlink" title="Trigger Rules"></a>Trigger Rules</h3><p>可以透過前面 Tasks 的狀態，來判斷後面的 Tasks 要不要執行，讓 Scheduler 判斷要不要將某個 Task 放入排程</p>
+<ul>
+<li>all_success<br>某個 Task 的上游 Tasks 的狀態都要是成功，才會執行這個 Task</li>
+<li>all_failed<br>上游 Tasks 的狀態都是失敗時執行，這可以用於處理 exception 狀態</li>
+<li>all_done<br>只要上游 Tasks 完成，不管它們的狀態是成功、失敗或是 skipped，都會執行</li>
+<li>one_failed<br>上游 Tasks 其中一個失敗就執行，這個 Trigger Rule 不會等上游 Tasks 都完成才執行，而是只要有失敗就立即執行</li>
+<li>one_success<br>上游 Tasks 其中一個成功就立即執行</li>
+<li>none_failed<br>上游 Tasks 的狀態都是成功或是 skipped</li>
+<li>none_skipped<br>上游 Tasks 的狀態是成功或是失敗時執行</li>
+</ul>
+<hr>
+<h2 id="Airflow-cfg"><a href="#Airflow-cfg" class="headerlink" title="Airflow.cfg"></a>Airflow.cfg</h2><p>使用 docker-compose 建立 airflow 的話，可以跳過這篇，<br>docker-compose 是透過”環境變數傳遞設定值”的方法設定，即 <code>AIRFLOW__&lt;...&gt;__&lt;...&gt;: True</code></p>
+<h3 id="core"><a href="#core" class="headerlink" title="core"></a>core</h3><p>Airflow 設定參數的核心，會記錄 Metadata Database、DAG 資料夾位置、Plugins 資料夾位置等</p>
+<ul>
+<li>dags_folder<br>存放 DAG 的資料夾，在 local 一般會是 <code>~/airflow/dags</code> 對應的絕對路徑</li>
+<li>plugins_folder<br>存放 Operator 的資料夾，在 local 一般會是 <code>~/airflow/plugins</code> 對應的絕對路徑</li>
+<li>sql_alchemy_conn<br>Database 的連線位置，預設用 SQLite 連到 <code>~/airflow/airflow.db</code> 的位置；SQLite 一般只用於開發，到了線上環境將換成其他 Database</li>
+<li>Remote Logging<ul>
+<li>remote_logging<br>是否開啟遠端紀錄 Log，目前支援 AWS S3、Google Cloud Storage、Elastic Search</li>
+<li>remote_log_conn_id<br>若要開啟，要記得先到 Connections 頁面創建一個 conn_id<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Conn Id: s3_conn</span><br><span class="line">Conn Type: S3</span><br><span class="line">Extra: &#123;&quot;aws_access_key_id&quot;:&quot;your_aws_key_id&quot;, &quot;aws_secret_access_key&quot;: &quot;your_aws_secret_key&quot;&#125;</span><br></pre></td></tr></table></figure></li>
+<li>remote_base_log_folder<br>與 base_log_folder 類似，也就是在遠端 log 要存放的相對位置</li>
+</ul>
+</li>
+<li>executor<br>預設的 Executor 是 SequentialExecutor，也可換成 LocalExecutor、CeleryExecutor、KubernetesExecutor等</li>
+<li>load_examples<br>在線上環境，如果不想看到 Airflow 預設的 Example DAG，可以透過這個參數關掉<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">load_examples = False</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="cli"><a href="#cli" class="headerlink" title="cli"></a>cli</h3><p>透過 cli 跟線上環境溝通</p>
+<ul>
+<li>api_client</li>
+</ul>
+<ol>
+<li>airflow.api.client.local_client<br>Airflow 會直接跟設定檔裡設定的 Database 溝通</li>
+<li>airflow.api.client.json_client<br>Airflow 會跟 endpoint_url 所設定的 WebServer 溝通</li>
+</ol>
+<ul>
+<li>endpoint_url<br>Airflow WebServer 的 url</li>
+</ul>
+<h3 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h3><p>只有一個設定值 fail_fast<br>若要啟用，要將 executor 改成 DebugExecutor，這個設定值會讓 DAG 裡面只要有一個 Task 狀態是 failed，整個 DAG 的狀態也會變成 failed</p>
+<h3 id="webserver"><a href="#webserver" class="headerlink" title="webserver"></a>webserver</h3><ul>
+<li>base_url<br>跟 email 比較有關係，Default Args 裡面的 email_on_failure 可以在 Task 失敗時自動寄信，Airflow 信中的內容會包括 WebServer 的位置，而這個位置就是 base_url</li>
+<li>SSL<br>可以透過 <code>web_server_ssl_cert</code> 及 <code>web_server_ssl_key</code> 設定 SSL 憑證</li>
+<li>secret_key<br>在線上環境，也要記得指定 <code>secret_key</code>，因為 Airflow 的 WebServer 是使用 Flask 實現的，Flask 會透過 <code>secret_key</code> 來對 cookies 簽名</li>
+</ul>
+<h3 id="smtp"><a href="#smtp" class="headerlink" title="smtp"></a>smtp</h3><p>設定 Airflow 寄信的相關設定</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[smtp]</span><br><span class="line">smtp_host = smtp.gmail.com</span><br><span class="line">smtp_starttls = True</span><br><span class="line">smtp_ssl = False</span><br><span class="line">smtp_user = YOUR_EMAIL_ADDRESS</span><br><span class="line">smtp_password = 16_DIGIT_APP_PASSWORD</span><br><span class="line">smtp_port = 587</span><br><span class="line">smtp_mail_from = YOUR_EMAIL_ADDRESS</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://stackoverflow.com/questions/70681089/gcp-command-to-retrieve-an-smtp-password-for-airflow">GCP SMTP 設定</a></p>
+<hr>
+<h2 id="Command-Line-Interface-CLI"><a href="#Command-Line-Interface-CLI" class="headerlink" title="Command Line Interface (CLI)"></a>Command Line Interface (CLI)</h2><p>若不需要使用 GUI 介面，也可直接使用 CLI，附上 command</p>
+<h3 id="Dags"><a href="#Dags" class="headerlink" title="Dags"></a>Dags</h3><h4 id="查詢-dags-列表"><a href="#查詢-dags-列表" class="headerlink" title="查詢 dags 列表"></a>查詢 dags 列表</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow dags list</span><br></pre></td></tr></table></figure>
+<h4 id="執行一次測試-dags"><a href="#執行一次測試-dags" class="headerlink" title="執行一次測試 dags"></a>執行一次測試 dags</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow dags test &lt;DAG_ID&gt; &lt;EXECUTION_TIME&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="刪除-dags"><a href="#刪除-dags" class="headerlink" title="刪除 dags"></a>刪除 dags</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow dags delete &lt;DAG_ID&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="顯示-dags-結構"><a href="#顯示-dags-結構" class="headerlink" title="顯示 dags 結構"></a>顯示 dags 結構</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow dags show &lt;DAG_ID&gt;</span><br><span class="line"># save</span><br><span class="line">$airflow dags show &lt;DAG_ID&gt; --save &lt;FILE_NAME.png&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Database"><a href="#Database" class="headerlink" title="Database"></a>Database</h3><h4 id="初始化資料庫"><a href="#初始化資料庫" class="headerlink" title="初始化資料庫"></a>初始化資料庫</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow db init</span><br></pre></td></tr></table></figure>
+<h4 id="查詢資料庫狀態"><a href="#查詢資料庫狀態" class="headerlink" title="查詢資料庫狀態"></a>查詢資料庫狀態</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow db check</span><br></pre></td></tr></table></figure>
+<h4 id="更新資料庫"><a href="#更新資料庫" class="headerlink" title="更新資料庫"></a>更新資料庫</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow db upgrade</span><br></pre></td></tr></table></figure>
+<h4 id="訪問資料庫"><a href="#訪問資料庫" class="headerlink" title="訪問資料庫"></a>訪問資料庫</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow db shell</span><br></pre></td></tr></table></figure>
+<h3 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h3><h4 id="查詢-dags-中的-tasks"><a href="#查詢-dags-中的-tasks" class="headerlink" title="查詢 dags 中的 tasks"></a>查詢 dags 中的 tasks</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow tasks list &lt;DAG_ID&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="執行-dags-中的其中一個-task"><a href="#執行-dags-中的其中一個-task" class="headerlink" title="執行 dags 中的其中一個 task"></a>執行 dags 中的其中一個 task</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow tasks test &lt;DAG_ID&gt; &lt;TASK_ID&gt; &lt;EXECUTION_TIME&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Users"><a href="#Users" class="headerlink" title="Users"></a>Users</h3><h4 id="查詢-users"><a href="#查詢-users" class="headerlink" title="查詢 users"></a>查詢 users</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow users list</span><br></pre></td></tr></table></figure>
+<h4 id="創建-user"><a href="#創建-user" class="headerlink" title="創建 user"></a>創建 user</h4><ul>
+<li>For Airflow &gt;&#x3D;2.0.0:<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow users  create --role &lt;user_role&gt; --username &lt;username&gt; --email &lt;email&gt; --firstname &lt;firstname&gt; --lastname &lt;lastname&gt; --password &lt;password&gt;</span><br><span class="line"># role includes admin, user, op, viewer, public</span><br></pre></td></tr></table></figure></li>
+<li>For Airflow &lt;1.10.14:<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow create_user -r &lt;user_role&gt; -u &lt;username&gt; -e &lt;email&gt; -f &lt;firstname&gt; -l &lt;lastname&gt; -p &lt;password&gt;</span><br><span class="line"># role includes admin, user, op, viewer, public</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="刪除-user"><a href="#刪除-user" class="headerlink" title="刪除 user"></a>刪除 user</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$airflow users delete -u &lt;USERNAME&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Airflow-的擴充性"><a href="#Airflow-的擴充性" class="headerlink" title="Airflow 的擴充性"></a>Airflow 的擴充性</h2><ol>
+<li>Airflow 有提供 Operators 就使用 Airflow</li>
+<li>如果沒有提供那就透過繼承使用 Hooks 連接外部服務自制 Operators</li>
+<li>Hooks 沒辦法解決的話則視問題的分類<ul>
+<li>資料處理或統計可以匯入資料到 SQL&#x2F;BigQuery 解決</li>
+<li>執行指令可以製作 Docker image 透過 DockerOperator&#x2F;KubernetesPodOperator 執行</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h2><ul>
+<li><a href="http://apache-airflow-docs.s3-website.eu-central-1.amazonaws.com/index.html">Airflow Documentation</a></li>
+<li><a href="https://stackoverflow.com/questions/66160780/first-time-login-to-apache-airflow-asks-for-username-and-password-what-is-the-u">Create username and password Apache Airflow</a></li>
+<li><a href="https://stackoverflow.com/questions/43410836/how-to-remove-default-example-dags-in-airflow">How to remove default example dags in airflow</a></li>
+<li><a href="https://dev.to/hyperredstart/airflow-chu-ti-yan-4a6a">使用 docker-compose 建立 airflow</a></li>
+<li><a href="https://leemeng.tw/a-story-about-airflow-and-data-engineering-using-how-to-use-python-to-catch-up-with-latest-comics-as-an-example.html">資料工程以及 Airflow</a></li>
+<li><a href="https://tw.coderbridge.com/series/c012cc1c8f9846359bb9b8940d4c10a8">Airflow 動手玩</a></li>
+<li><a href="https://3lexw.medium.com/apache-airflow-2-1-%E5%9F%BA%E7%A4%8E%E6%95%99%E5%AD%B8-2-%E5%AE%89%E8%A3%9D%E5%8F%8A%E5%9F%BA%E7%A4%8E%E8%A8%AD%E5%AE%9A-5622f7cff10d">Airflow 安裝及基礎設定</a></li>
+</ul>
+<p><br /><br />作者：Ian Chang <br />網址： <a href="https://yuyaochang.github.io/2023/01/12/Apache_Airflow_%E4%BB%8B%E7%B4%B9%E5%8F%8A%E4%BD%BF%E7%94%A8/">https://yuyaochang.github.io/2023/01/12/Apache_Airflow_介紹及使用&#x2F;</a> <br />版權聲明：Blog中所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/tw/">CC BY-NC-SA 3.0 TW</a> 許可協議，若要轉載請註明出處</p>
+]]></content>
+      <categories>
+        <category>Airflow</category>
+      </categories>
+      <tags>
+        <tag>Airflow</tag>
+        <tag>Python</tag>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>從0到1</title>
     <url>/2022/08/21/Blog%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</url>
     <content><![CDATA[<p>終於架好這個網站了！！<br>架完之後第一件事情就是想著第一篇文章要寫什麼 XD</p>
@@ -107,7 +350,7 @@
   <entry>
     <title>Recommendation_System_推薦系統概念介紹_Python</title>
     <url>/2022/11/03/Recommendation_System_%E6%8E%A8%E8%96%A6%E7%B3%BB%E7%B5%B1%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%B4%B9_Python/</url>
-    <content><![CDATA[<p>推薦系統就像是一種 “訊息過濾系統”，**會依照特定的規則進行過濾，並預測用戶對商品的 “評分” 或 “偏好”**，<br>透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。</p>
+    <content><![CDATA[<p>推薦系統就像是一種 “訊息過濾系統”，<strong>會依照特定的規則進行過濾，並預測用戶對商品的評分或偏好</strong>，<br>透過推薦系統能夠降低消費者的選擇時間，提高衝動購買的機率，幫助用戶找到最適合自己、最感興趣的商品。</p>
 <p>推薦系統的演算法發展至今，Python、R 等許多程式都有提供相關套件進行推薦系統的演算法運算，<br>因此就目前而言，不是著重於如何實現這些演算法運算，而是透過哪個演算法才能夠解決當下的問題。</p>
 <p><img src="/images/recommender_system/recommender_system_classfiy.jpg"><span id="more"></span></p>
 <hr>
@@ -224,8 +467,69 @@ SVD 為一種降維工具，可拆解成 U, Sigma, Vt 三個矩陣，而對角�
         <category>推薦系統</category>
       </categories>
       <tags>
-        <tag>Recommendation System</tag>
         <tag>Python</tag>
+        <tag>Recommendation System</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>投資初心者系列-交易模式</title>
+    <url>/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97_%E4%BA%A4%E6%98%93%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p>近年來投資市場越來越熱絡，<br>或許是因為多數人的理財觀念有所提升，知道把錢存在銀行會因為通貨膨脹而越變越薄；<br>又或是從過去的經驗來看把錢投入股市，長期而言，<br>股市將會不斷的上漲，即便跌得再深都有漲回來的一天。<br>(會不會每次都漲回來我自己持保留態度，後續有機會再探討這個議題)</p>
+<p>本系列希望講述一些投資相關基本知識以及我個人認為投資中最重要的事，<br>第一篇就先以交易模式作為主要介紹內容。</p>
+<h3 id="學投資的第一步應該要做什麼"><a href="#學投資的第一步應該要做什麼" class="headerlink" title="學投資的第一步應該要做什麼?"></a>學投資的第一步應該要做什麼?</h3><p>看到這個標題很多人會直覺回答：<strong>當然是學怎麼賺錢囉~</strong><span id="more"></span><br>我認為這句話對也不對，<br>許多人學投資的第一步是去了解：基本面分析、技術面分析、看投顧老師節目等，<br>試圖了解如何挑選到會上漲的標的，但往往不會考慮到背後的風險，<br>在投資的過程中，永遠要記住<strong>期望的報酬越高，風險將會越大</strong>；<br>而賺錢是希望透過投資達到的最終目的，<br>但想要達到這個目的會需要滿足很多種條件，<br>不只是單靠挑選到會上漲的標的就好，<br>還需要透過資金、風險管理等方式，做一些看錯方向時的停損、下跌保護等操作。<br><del>當然如果你非常厲害勝率100%永遠不會看錯方向…另當別論</del></p>
+<h3 id="交易模式"><a href="#交易模式" class="headerlink" title="交易模式"></a>交易模式</h3><p>投資最重要的事，其中之一就是<strong>交易模式</strong>。</p>
+<p>為什麼要了解交易模式？</p>
+<p>市場是由許多不同的人所組成的，<br>每個人所制定的交易邏輯、進出場策略以及對未來趨勢的看法都不一樣，<br><code>tips:市場上要有不同的操作、看法才會促成市場成交(流動性)</code><br>因此，制訂一套適合自已、擅長操作的交易模式是非常重要的。</p>
+<p>要了解自己的個性、風險承受度適合哪種交易模式，<br>首先，要先了解交易模式有哪些，<br>交易模式主要可以分成左側交易與右側交易。</p>
+<h4 id="左側交易-逆勢交易"><a href="#左側交易-逆勢交易" class="headerlink" title="左側交易(逆勢交易)"></a>左側交易(逆勢交易)</h4><p>左側交易(逆勢交易)的概念，<br>主要是<strong>在下跌時分批買入，在上漲時分批賣出</strong>，<br>這種交易模式又可稱為<strong>價值投資</strong>，<br>當標的下跌到合理價格範圍時，分批佈局；<br>左側交易比較適合具有長期投資(或搶反彈)、資金龐大、有耐心、心理素質強等因素的投資者，<br>這種交易模式較違反人性，<br>當標的下跌越多時，需要買入的部位越多，<br>因此挑選對標的、做好資金管理就是一件十分重要的事。</p>
+<img src="/images/Investment/左側交易.jpg" width="50%">
+
+<p>左側交易最害怕的是<strong>下跌時分批買入，最後股價沒有回升、被套牢</strong>，<br>因此，在挑選標的的部分：<br>標的要符合長期上行趨勢、體質強健等條件，<br>如果標的體質不夠強健，遇到熊市時，<br>無法保證標的是否能撐過熊市時期(如：股票下市、營收持續惡化等)；<br>如果長期不為上行趨勢，熬過下跌後，<br>後續上漲的機率可能相較於長期上行趨勢的標的來的低。</p>
+<p>而在資金管理的部分，<br>左側交易需要控制下跌時分批買入以及上漲時分批賣出的速度，<br>否則容易遇到在長期下跌的過程中，買入速度太快，導致平均持倉成本過高(套牢在高點)，<br>並且當標的價格較低時，已無資金可以進場壓低平均持倉成本；<br>又或者在上漲的過程中，賣出速度太快，導致錯過後續長期多頭的中後段漲幅(魚尾留給別人賺)。</p>
+<p>從資金管理的邏輯上，也將延伸出另一個問題，<br>左側交易需要了解目前標的價格是否在一個合理的價位，<br>或者說需要了解市場當下對該標的折溢價狀況是否合理，<br>這會需要有很多基本面(標的、總體經濟等)的相關知識才能夠進行判斷。</p>
+<p>優點：</p>
+<ol>
+<li>買在相對低點，長期持有勝率、獲利空間較大。</li>
+<li>較不會有滑價問題。</li>
+<li><del>標的價格遠離成本價後，可以安心睡覺。</del></li>
+</ol>
+<p>缺點：</p>
+<ol>
+<li>等待反彈並獲利所需要的時間很長、時間成本高。</li>
+<li>投資者需要有強大的心理素質，在下跌的過程中，堅持自己的交易決策。</li>
+</ol>
+<h4 id="右側交易-順勢交易"><a href="#右側交易-順勢交易" class="headerlink" title="右側交易(順勢交易)"></a>右側交易(順勢交易)</h4><p>右側交易(順勢交易)的概念，<br>主要是<strong>在上漲時分批買入，在下跌時分批賣出</strong>，<br>這種交易模式又可稱為<strong>動能交易</strong>，<br>當標的出現底部型態且已出現上漲趨勢時，分批買入，<br>待標的漲到頂部且已開始下跌時，分批賣出，<br>即不預測未來漲跌，只跟著市場趨勢順勢做交易；<br>這種交易模式較適合具有遵守交易紀律、做短線、做波段等因素的投資者。</p>
+<img src="/images/Investment/右側交易.jpg" width="50%">
+
+
+<p>這種交易模式所交易的標的需要有一定的波動性，<br>不能夠選擇長期盤整或波動性低的標的，<br>主要原因在於此交易模式都是等到價格有明確突破、跌破時，才會進場交易，<br>進場時，標的價格已漲過一段，趨勢很容易出現反轉，<br>可能造成才剛進場沒多久馬上就要減碼甚至是出場，<br>因此其勝率通常較左側交易低；<br>同時，在右側交易的交易模式中，投資者需要有果斷的交易紀律，<br>無論是在加碼、減碼、停損、停利等交易策略上，<br>都需要嚴格進行遵守，並遵循汰弱留強的標的篩選機制。</p>
+<p>優點：</p>
+<ol>
+<li>價格有明確突破、跌破時進行交易，時間成本較少。</li>
+<li>若嚴格遵守交易紀律，風險較低。</li>
+<li>持倉時間較短，資金週轉率高。</li>
+</ol>
+<p>缺點：</p>
+<ol>
+<li>獲利空間僅有中間的波段部分，且進場後容易出現反轉</li>
+<li>時常發生反轉(上沖下洗)可能會造成不斷停損時資金的耗損</li>
+</ol>
+<h3 id="交易一致性"><a href="#交易一致性" class="headerlink" title="交易一致性"></a>交易一致性</h3><p>在交易的過程中，交易一致性是非常重要的，<br>舉個例子來說，如果你做的是右側交易，<br>你必需遵守你所設定的交易紀律(策略)，可能包含：</p>
+<ol>
+<li>進場條件：突破價格進場做多、跌破價格進場做空等</li>
+<li>出場條件：觸及停利價格則停利出場、觸及停損價格則停損出場等</li>
+</ol>
+<p>嚴格遵守交易紀律說起來很容易，<br>但常常在投資者的心理上實踐並不容易，<br>設想今天進場的標的是台積電(2330.TW)，<br>當價格已經跌到你的交易策略中預計應該停損的位置，<br>但市場、媒體、投顧分析師等都告訴你現在是低點應該要進場，<br>並且對它未來的產業展望、企業營收等都具有正面的評價；<br>在這樣的情境下，<br>你能否堅持自己的交易紀律，果斷地去執行停損的動作，<br>如果你已經可以做到，那你在投資的道路上會順利許多，<br>如果你目前還無法做到，那這是你需要學習、練習的一部分。</p>
+<p>投資者保持自己的交易一致性是很重要的，遵循自己所設定好的交易紀律，<br><strong>進場前需預先想好進場的條件、價位，進場後需預先想好出場的條件、方式</strong>，<br>不被外在的因素(新聞、投顧分析師等)影響自己的交易策略，<br>當進場的理由消失、停損點到達時，就是要出場的時候，<br>這些都是作為投資者應該要有的交易紀律。</p>
+<p><code>tips:投資者必需嚴格遵守交易紀律，任何事情都不能影響這些規則</code></p>
+<p><br /><br />作者：Ian Chang <br />網址： <a href="https://yuyaochang.github.io/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97_%E4%BA%A4%E6%98%93%E6%A8%A1%E5%BC%8F/">https://yuyaochang.github.io/2022/10/15/投資初心者系列_交易模式&#x2F;</a> <br />版權聲明：Blog中所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/tw/">CC BY-NC-SA 3.0 TW</a> 許可協議，若要轉載請註明出處</p>
+]]></content>
+      <categories>
+        <category>Investment</category>
+      </categories>
+      <tags>
+        <tag>Investment</tag>
+        <tag>投資初心者系列</tag>
       </tags>
   </entry>
   <entry>
@@ -284,67 +588,6 @@ SVD 為一種降維工具，可拆解成 U, Sigma, Vt 三個矩陣，而對角�
         <tag>Hexo</tag>
         <tag>Github</tag>
         <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>投資初心者系列-交易模式</title>
-    <url>/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97-%E4%BA%A4%E6%98%93%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<p>近年來投資市場越來越熱絡，<br>或許是因為多數人的理財觀念有所提升，知道把錢存在銀行會因為通貨膨脹而越變越薄；<br>又或是從過去的經驗來看把錢投入股市，長期而言，<br>股市將會不斷的上漲，即便跌得再深都有漲回來的一天。<br>(會不會每次都漲回來我自己持保留態度，後續有機會再探討這個議題)</p>
-<p>本系列希望講述一些投資相關基本知識以及我個人認為投資中最重要的事，<br>第一篇就先以交易模式作為主要介紹內容。</p>
-<h3 id="學投資的第一步應該要做什麼"><a href="#學投資的第一步應該要做什麼" class="headerlink" title="學投資的第一步應該要做什麼?"></a>學投資的第一步應該要做什麼?</h3><p>看到這個標題很多人會直覺回答：<strong>當然是學怎麼賺錢囉~</strong><span id="more"></span><br>我認為這句話對也不對，<br>許多人學投資的第一步是去了解：基本面分析、技術面分析、看投顧老師節目等，<br>試圖了解如何挑選到會上漲的標的，但往往不會考慮到背後的風險，<br>在投資的過程中，永遠要記住<strong>期望的報酬越高，風險將會越大</strong>；<br>而賺錢是希望透過投資達到的最終目的，<br>但想要達到這個目的會需要滿足很多種條件，<br>不只是單靠挑選到會上漲的標的就好，<br>還需要透過資金、風險管理等方式，做一些看錯方向時的停損、下跌保護等操作。<br><del>當然如果你非常厲害勝率100%永遠不會看錯方向…另當別論</del></p>
-<h3 id="交易模式"><a href="#交易模式" class="headerlink" title="交易模式"></a>交易模式</h3><p>投資最重要的事，其中之一就是<strong>交易模式</strong>。</p>
-<p>為什麼要了解交易模式？</p>
-<p>市場是由許多不同的人所組成的，<br>每個人所制定的交易邏輯、進出場策略以及對未來趨勢的看法都不一樣，<br><code>tips:市場上要有不同的操作、看法才會促成市場成交(流動性)</code><br>因此，制訂一套適合自已、擅長操作的交易模式是非常重要的。</p>
-<p>要了解自己的個性、風險承受度適合哪種交易模式，<br>首先，要先了解交易模式有哪些，<br>交易模式主要可以分成左側交易與右側交易。</p>
-<h4 id="左側交易-逆勢交易"><a href="#左側交易-逆勢交易" class="headerlink" title="左側交易(逆勢交易)"></a>左側交易(逆勢交易)</h4><p>左側交易(逆勢交易)的概念，<br>主要是<strong>在下跌時分批買入，在上漲時分批賣出</strong>，<br>這種交易模式又可稱為<strong>價值投資</strong>，<br>當標的下跌到合理價格範圍時，分批佈局；<br>左側交易比較適合具有長期投資(或搶反彈)、資金龐大、有耐心、心理素質強等因素的投資者，<br>這種交易模式較違反人性，<br>當標的下跌越多時，需要買入的部位越多，<br>因此挑選對標的、做好資金管理就是一件十分重要的事。</p>
-<img src="/images/Investment/左側交易.jpg" width="50%">
-
-<p>左側交易最害怕的是<strong>下跌時分批買入，最後股價沒有回升、被套牢</strong>，<br>因此，在挑選標的的部分：<br>標的要符合長期上行趨勢、體質強健等條件，<br>如果標的體質不夠強健，遇到熊市時，<br>無法保證標的是否能撐過熊市時期(如：股票下市、營收持續惡化等)；<br>如果長期不為上行趨勢，熬過下跌後，<br>後續上漲的機率可能相較於長期上行趨勢的標的來的低。</p>
-<p>而在資金管理的部分，<br>左側交易需要控制下跌時分批買入以及上漲時分批賣出的速度，<br>否則容易遇到在長期下跌的過程中，買入速度太快，導致平均持倉成本過高(套牢在高點)，<br>並且當標的價格較低時，已無資金可以進場壓低平均持倉成本；<br>又或者在上漲的過程中，賣出速度太快，導致錯過後續長期多頭的中後段漲幅(魚尾留給別人賺)。</p>
-<p>從資金管理的邏輯上，也將延伸出另一個問題，<br>左側交易需要了解目前標的價格是否在一個合理的價位，<br>或者說需要了解市場當下對該標的折溢價狀況是否合理，<br>這會需要有很多基本面(標的、總體經濟等)的相關知識才能夠進行判斷。</p>
-<p>優點：</p>
-<ol>
-<li>買在相對低點，長期持有勝率、獲利空間較大。</li>
-<li>較不會有滑價問題。</li>
-<li><del>標的價格遠離成本價後，可以安心睡覺。</del></li>
-</ol>
-<p>缺點：</p>
-<ol>
-<li>等待反彈並獲利所需要的時間很長、時間成本高。</li>
-<li>投資者需要有強大的心理素質，在下跌的過程中，堅持自己的交易決策。</li>
-</ol>
-<h4 id="右側交易-順勢交易"><a href="#右側交易-順勢交易" class="headerlink" title="右側交易(順勢交易)"></a>右側交易(順勢交易)</h4><p>右側交易(順勢交易)的概念，<br>主要是<strong>在上漲時分批買入，在下跌時分批賣出</strong>，<br>這種交易模式又可稱為<strong>動能交易</strong>，<br>當標的出現底部型態且已出現上漲趨勢時，分批買入，<br>待標的漲到頂部且已開始下跌時，分批賣出，<br>即不預測未來漲跌，只跟著市場趨勢順勢做交易；<br>這種交易模式較適合具有遵守交易紀律、做短線、做波段等因素的投資者。</p>
-<img src="/images/Investment/右側交易.jpg" width="50%">
-
-
-<p>這種交易模式所交易的標的需要有一定的波動性，<br>不能夠選擇長期盤整或波動性低的標的，<br>主要原因在於此交易模式都是等到價格有明確突破、跌破時，才會進場交易，<br>進場時，標的價格已漲過一段，趨勢很容易出現反轉，<br>可能造成才剛進場沒多久馬上就要減碼甚至是出場，<br>因此其勝率通常較左側交易低；<br>同時，在右側交易的交易模式中，投資者需要有果斷的交易紀律，<br>無論是在加碼、減碼、停損、停利等交易策略上，<br>都需要嚴格進行遵守，並遵循汰弱留強的標的篩選機制。</p>
-<p>優點：</p>
-<ol>
-<li>價格有明確突破、跌破時進行交易，時間成本較少。</li>
-<li>若嚴格遵守交易紀律，風險較低。</li>
-<li>持倉時間較短，資金週轉率高。</li>
-</ol>
-<p>缺點：</p>
-<ol>
-<li>獲利空間僅有中間的波段部分，且進場後容易出現反轉</li>
-<li>時常發生反轉(上沖下洗)可能會造成不斷停損時資金的耗損</li>
-</ol>
-<h3 id="交易一致性"><a href="#交易一致性" class="headerlink" title="交易一致性"></a>交易一致性</h3><p>在交易的過程中，交易一致性是非常重要的，<br>舉個例子來說，如果你做的是右側交易，<br>你必需遵守你所設定的交易紀律(策略)，可能包含：</p>
-<ol>
-<li>進場條件：突破價格進場做多、跌破價格進場做空等</li>
-<li>出場條件：觸及停利價格則停利出場、觸及停損價格則停損出場等</li>
-</ol>
-<p>嚴格遵守交易紀律說起來很容易，<br>但常常在投資者的心理上實踐並不容易，<br>設想今天進場的標的是台積電(2330.TW)，<br>當價格已經跌到你的交易策略中預計應該停損的位置，<br>但市場、媒體、投顧分析師等都告訴你現在是低點應該要進場，<br>並且對它未來的產業展望、企業營收等都具有正面的評價；<br>在這樣的情境下，<br>你能否堅持自己的交易紀律，果斷地去執行停損的動作，<br>如果你已經可以做到，那你在投資的道路上會順利許多，<br>如果你目前還無法做到，那這是你需要學習、練習的一部分。</p>
-<p>投資者保持自己的交易一致性是很重要的，遵循自己所設定好的交易紀律，<br><strong>進場前需預先想好進場的條件、價位，進場後需預先想好出場的條件、方式</strong>，<br>不被外在的因素(新聞、投顧分析師等)影響自己的交易策略，<br>當進場的理由消失、停損點到達時，就是要出場的時候，<br>這些都是作為投資者應該要有的交易紀律。</p>
-<p><code>tips:投資者必需嚴格遵守交易紀律，任何事情都不能影響這些規則</code></p>
-<p><br /><br />作者：Ian Chang <br />網址： <a href="https://yuyaochang.github.io/2022/10/15/%E6%8A%95%E8%B3%87%E5%88%9D%E5%BF%83%E8%80%85%E7%B3%BB%E5%88%97-%E4%BA%A4%E6%98%93%E6%A8%A1%E5%BC%8F/">https://yuyaochang.github.io/2022/10/15/投資初心者系列-交易模式/</a> <br />版權聲明：Blog中所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/tw/">CC BY-NC-SA 3.0 TW</a> 許可協議，若要轉載請註明出處</p>
-]]></content>
-      <categories>
-        <category>Investment</category>
-      </categories>
-      <tags>
-        <tag>Investment</tag>
-        <tag>投資初心者系列</tag>
       </tags>
   </entry>
 </search>
